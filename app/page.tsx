@@ -1,69 +1,135 @@
-import Image from "next/image";
+import Link from "next/link";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
+import { Countdown } from "@/components/live/countdown";
+import { FadeIn } from "@/components/motion";
+import { HowItWorks } from "@/components/home/how-it-works";
+import { PrimaryCta } from "@/components/home/primary-cta";
+import { DedicationCard } from "@/components/dedication/dedication-card";
+import { buttonVariants } from "@/components/ui/button";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { getSettings } from "@/lib/settings";
+import { getFeaturedDedication } from "@/app/actions/dedications";
+import { formatShowTimeLabel } from "@/lib/timezone";
+import { cn } from "@/lib/utils";
+import { FAQ_ITEMS } from "@/lib/faq";
 
-export default function Home() {
+export default async function HomePage() {
+  const settings = await getSettings();
+  const featured = await getFeaturedDedication();
+  const timeLabel = formatShowTimeLabel(settings.showTime, settings.timezone);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+    <div className="flex min-h-full flex-1 flex-col">
+      <SiteHeader showName={settings.showName} />
+      <main className="flex-1">
+        <section className="relative overflow-hidden px-4 pb-0 pt-6 sm:px-6 sm:pt-10">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-8 size-72 -translate-x-1/2 rounded-full bg-primary/20 blur-3xl"
+          />
+          <div className="mx-auto w-full max-w-6xl">
+            <FadeIn className="flex flex-col items-center text-center md:items-start md:text-left">
+              <p className="text-sm font-medium tracking-wide text-primary">
+                Every Saturday · {timeLabel}
+              </p>
+              <h1 className="mt-4 max-w-xl text-balance font-display text-4xl font-semibold tracking-tight sm:text-6xl">
+                Say It.
+                <br className="md:hidden" />{" "}
+                We&apos;ll Read It Live.{" "}
+                <span className="text-primary glow-text">❤️</span>
+              </h1>
+              <p className="mt-5 w-[80%] max-w-lg text-lg text-muted-foreground">
+                Send a dedication to someone special and let us surprise them
+                during our Saturday TikTok Live.
+              </p>
+              <div className="mt-8 flex w-[80%] max-w-md flex-col items-center gap-3 sm:flex-row sm:justify-center md:w-auto md:max-w-none md:justify-start">
+                <PrimaryCta href="/dedicate">Send a Dedication</PrimaryCta>
+                <Link
+                  href="/live"
+                  className={cn(buttonVariants({ variant: "outline" }), "h-12 w-full px-6 text-base sm:w-auto")}
+                >
+                  Watch Us Live
+                </Link>
+              </div>
+              <Countdown
+                className="mt-8 mx-auto md:mx-0"
+                timezone={settings.timezone}
+                showTime={settings.showTime}
+                durationMinutes={settings.showDurationMinutes}
+                override={settings.showStatusOverride}
+              />
+            </FadeIn>
+          </div>
+        </section>
+
+        <HowItWorks />
+
+        <section className="px-4 py-8 sm:px-6">
+          <FadeIn className="mx-auto max-w-4xl rounded-[2rem] border border-primary/20 bg-primary/10 px-6 py-10 text-center">
+            <h2 className="font-display text-3xl font-semibold">Ready to say it?</h2>
+            <p className="mt-3 text-muted-foreground">
+              Tell us who it&apos;s for. We&apos;ll take it from there.
+            </p>
+            <Link href="/dedicate" className={cn(buttonVariants(), "mt-6 h-12 px-8")}>
+              Send a Dedication
+            </Link>
+          </FadeIn>
+        </section>
+
+        <section className="px-4 py-16 sm:px-6">
+          <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-2">
+            <div>
+              <h2 className="font-display text-3xl font-semibold">Why send a dedication</h2>
+              <ul className="mt-6 space-y-4 text-muted-foreground">
+                <li>Because some words feel bigger when they&apos;re said out loud.</li>
+                <li>Because a surprise on live hits differently than a private text.</li>
+                <li>Because you can stay anonymous — or let them know it was you.</li>
+              </ul>
+            </div>
+            <DedicationCard
+              from={featured?.from || "Anonymous"}
+              to={featured?.to || "Sarah"}
+              message={
+                featured?.message ||
+                "You mean more to me than words can explain. I just needed you to hear it."
+              }
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+          </div>
+        </section>
+
+        <section className="px-4 py-12 sm:px-6">
+          <div className="mx-auto max-w-3xl rounded-3xl border border-border bg-card p-8 text-center">
+            <h2 className="font-display text-3xl font-semibold">Join us LIVE ❤️</h2>
+            <p className="mt-3 text-muted-foreground">
+              Every Saturday · {timeLabel}
+            </p>
+            <Link href="/live" className={cn(buttonVariants(), "mt-6 h-12 px-8")}>
+              Watch Us Live
+            </Link>
+          </div>
+        </section>
+
+        <section className="px-4 py-16 sm:px-6">
+          <div className="mx-auto max-w-3xl">
+            <h2 className="text-center font-display text-3xl font-semibold">FAQ</h2>
+            <Accordion className="mt-8">
+              {FAQ_ITEMS.slice(0, 5).map((item) => (
+                <AccordionItem key={item.q} value={item.q}>
+                  <AccordionTrigger className="py-4 text-base">{item.q}</AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">{item.a}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+            <p className="mt-6 text-center">
+              <Link href="/faq" className="text-sm text-primary hover:underline">
+                See all questions
+              </Link>
+            </p>
+          </div>
+        </section>
       </main>
+      <SiteFooter showName={settings.showName} tiktokUrl={settings.tiktokUrl} />
     </div>
   );
 }

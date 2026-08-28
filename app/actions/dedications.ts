@@ -1,0 +1,177 @@
+"use server";
+
+import { headers } from "next/headers";
+import { and, eq } from "drizzle-orm";
+import { dedications } from "@/drizzle/schema";
+import { getDb, isDatabaseConfigured } from "@/lib/db";
+import { generatePublicId } from "@/lib/public-id";
+import { getSettings } from "@/lib/settings";
+import { sanitizeName, sanitizeText, isHoneypotFilled } from "@/lib/sanitize";
+import { dedicationFormSchema } from "@/lib/validation";
+import { getCountry } from "@/lib/countries";
+import { validateWhatsApp } from "@/lib/whatsapp";
+import { assertRateLimit, getClientIp, hashIp, verifyTurnstile } from "@/lib/rate-limit";
+import { getNextShowStart } from "@/lib/timezone";
+import { PUBLIC_STATUS_LABEL, type DedicationStatus } from "@/lib/constants";
+
+export type CreateDedicationResult =
+  | { ok: true; publicId: string }
+  | { ok: false; error: string; fieldErrors?: Record<string, string> };
+
+export async function createDedication(
+  input: unknown
+): Promise<CreateDedicationResult> {
+  if (!isDatabaseConfigured()) {
+    return {
+      ok: false,
+      error: "The show isn't accepting dedications just yet. Please try again soon.",
+    };
+  }
+
+  const settings = await getSettings();
+  const parsed = dedicationFormSchema(settings.maxDedicationLength).safeParse(input);
+
+  if (!parsed.success) {
+    const fieldErrors: Record<string, string> = {};
+    for (const issue of parsed.error.issues) {
+      const key = issue.path[0]?.toString() || "form";
+      if (!fieldErrors[key]) fieldErrors[key] = issue.message;
+    }
+    return {
+      ok: false,
+      error: "Please check the form and try again.",
+      fieldErrors,
+    };
+  }
+
+  const data = parsed.data;
+
+  if (isHoneypotFilled(data.website)) {
+    return { ok: true, publicId: "DED-XXXXX" };
+  }
+
+  const headerList = await headers();
+  const ip = getClientIp(headerList);
+  const turnstile = await verifyTurnstile(data.turnstileToken, ip);
+  if (!turnstile.ok) {
+    return { ok: false, error: turnstile.error };
+  }
+
+  const limited = await assertRateLimit(`dedication:${hashIp(ip)}`);
+  if (!limited.ok) {
+    return { ok: false, error: limited.error };
+  }
+
+  const country = getCountry(data.countryIso);
+  const phone = validateWhatsApp(country.dial, data.whatsappNational);
+  if (!phone.ok) {
+    return {
+      ok: false,
+      error: phone.error,
+      fieldErrors: { whatsappNational: phone.error },
+    };
+  }
+
+  const message = sanitizeText(data.message, settings.maxDedicationLength);
+  const recipientName = sanitizeName(data.recipientName);
+  const senderName = data.isAnonymous
+    ? null
+    : sanitizeName(data.senderName || "");
+
+  if (!recipientName || !message) {
+    return { ok: false, error: "Please write a dedication." };
+  }
+
+  const liveDate = getNextShowStart(new Date(), {
+    timezone: settings.timezone,
+    showTime: settings.showTime,
+    durationMinutes: settings.showDurationMinutes,
+  });
+
+  const db = getDb();
+  let publicId = generatePublicId();
+
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    try {
+      await db.insert(dedications).values({
+        publicId,
+        senderName,
+        isAnonymous: data.isAnonymous || !senderName,
+        recipientName,
+        recipientWhatsapp: phone.e164,
+        dedicationMessage: message,
+        status: "NEW",
+        donationStatus: "OFFERED",
+        liveDate,
+        submitterIpHash: hashIp(ip),
+      });
+
+      return { ok: true, publicId };
+    } catch {
+      publicId = generatePublicId();
+    }
+  }
+
+  return {
+    ok: false,
+    error: "Your dedication wasn't submitted. Please try again.",
+  };
+}
+
+export async function getPublicDedication(publicId: string) {
+  if (!isDatabaseConfigured()) return null;
+
+  const db = getDb();
+  const [row] = await db
+    .select({
+      publicId: dedications.publicId,
+      senderName: dedications.senderName,
+      isAnonymous: dedications.isAnonymous,
+      recipientName: dedications.recipientName,
+      dedicationMessage: dedications.dedicationMessage,
+      status: dedications.status,
+      submittedAt: dedications.submittedAt,
+    })
+    .from(dedications)
+    .where(and(eq(dedications.publicId, publicId.toUpperCase())))
+    .limit(1);
+
+  if (!row) return null;
+
+  return {
+    publicId: row.publicId,
+    from: row.isAnonymous ? "Anonymous" : row.senderName || "Anonymous",
+    to: row.recipientName,
+    message: row.dedicationMessage,
+    status: PUBLIC_STATUS_LABEL[row.status as DedicationStatus] || "Received",
+    submittedAt: row.submittedAt.toISOString(),
+  };
+}
+
+export async function getFeaturedDedication() {
+  if (!isDatabaseConfigured()) return null;
+
+  try {
+    const db = getDb();
+    const [row] = await db
+      .select({
+        recipientName: dedications.recipientName,
+        dedicationMessage: dedications.dedicationMessage,
+        isAnonymous: dedications.isAnonymous,
+        senderName: dedications.senderName,
+      })
+      .from(dedications)
+      .where(eq(dedications.featured, true))
+      .limit(1);
+
+    if (!row) return null;
+
+    return {
+      to: row.recipientName,
+      from: row.isAnonymous ? "Anonymous" : row.senderName || "Anonymous",
+      message: row.dedicationMessage,
+    };
+  } catch {
+    return null;
+  }
+}
