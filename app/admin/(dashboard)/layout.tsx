@@ -33,7 +33,7 @@ export default async function AdminDashboardLayout({
       <AdminSidebar showName={settings.showName} isOwner={me.isOwner} />
       <div className="flex min-w-0 flex-1 flex-col">
         <AdminMobileNav showName={settings.showName} isOwner={me.isOwner} />
-        <div className="flex-1 p-4 sm:p-6 lg:p-8">{children}</div>
+        <div className="min-w-0 flex-1 overflow-x-hidden p-4 sm:p-6 lg:p-8">{children}</div>
       </div>
     </div>
   );
