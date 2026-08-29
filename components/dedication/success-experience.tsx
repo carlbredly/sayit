@@ -7,23 +7,18 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { recordDonationIntent } from "@/app/actions/dedications";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
-import { DEFAULT_DONATION_URL } from "@/lib/constants";
-import { getPaypalDonationUrl } from "@/lib/paypal";
 
 export function SuccessExperience({
   publicId,
-  paypalUrl,
   donationMessage,
   tiktokUrl,
 }: {
   publicId: string;
-  paypalUrl: string;
   donationMessage: string;
   tiktokUrl: string;
 }) {
   const [phase, setPhase] = useState<"success" | "done">("success");
   const [copied, setCopied] = useState(false);
-  const donationUrl = getPaypalDonationUrl(paypalUrl) || DEFAULT_DONATION_URL;
 
   useEffect(() => {
     if (publicId.startsWith("DED-") && publicId !== "DED-XXXXX") {
@@ -107,22 +102,18 @@ export function SuccessExperience({
           Entièrement optionnel. Ta dédicace est déjà enregistrée.
         </p>
         <div className="mt-6 flex flex-col gap-3">
-          {donationUrl ? (
-            <a
-              href={donationUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => {
-                track("donation_cta_clicked");
-                void recordDonationIntent(publicId, "PENDING");
-              }}
-              className="inline-flex h-12 items-center justify-center rounded-lg bg-[#6D1ED4] px-6 font-semibold text-white"
-            >
-              Soutenir l&apos;émission
-            </a>
-          ) : (
-            <p className="text-sm text-muted-foreground">Les dons ne sont pas encore configurés.</p>
-          )}
+          <a
+            href="https://zellepay.com/qr/8036ce78-68f7-43c3-8833-2a40e4f93798"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => {
+              track("donation_cta_clicked");
+              void recordDonationIntent(publicId, "PENDING");
+            }}
+            className="inline-flex h-12 items-center justify-center rounded-lg bg-[#6D1ED4] px-6 font-semibold text-white"
+          >
+            Soutenir l&apos;émission
+          </a>
           <Button variant="ghost" className="h-12" onClick={() => setPhase("done")}>
             Plus tard
           </Button>

@@ -4,7 +4,6 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { getSettings } from "@/lib/settings";
 import { isValidPublicId } from "@/lib/public-id";
-import { getPaypalDonationUrl } from "@/lib/paypal";
 
 export const dynamic = "force-dynamic";
 
@@ -28,7 +27,6 @@ export default async function SuccessPage({
       <main className="flex-1">
         <SuccessExperience
           publicId={publicId}
-          paypalUrl={getPaypalDonationUrl(settings.paypalDonationUrl)}
           donationMessage={settings.donationMessage}
           tiktokUrl={settings.tiktokUrl}
         />
