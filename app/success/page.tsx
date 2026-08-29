@@ -5,6 +5,8 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { getSettings } from "@/lib/settings";
 import { isValidPublicId } from "@/lib/public-id";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Dedication received",
   robots: { index: false, follow: false },

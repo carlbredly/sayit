@@ -1,11 +1,19 @@
-import { redirect } from "next/navigation";
 import { UsersManager } from "@/components/admin/users-manager";
 import { listAdminUsers } from "@/app/actions/users";
 import { requireActiveAdmin } from "@/lib/admin-guard";
 
 export default async function AdminUsersPage() {
   const { admin } = await requireActiveAdmin();
-  if (!admin.isOwner) redirect("/admin");
+  if (!admin.isOwner) {
+    return (
+      <div className="space-y-3">
+        <h1 className="font-display text-2xl font-semibold">Users</h1>
+        <p className="text-sm text-muted-foreground">
+          Only the owner can add users and change access.
+        </p>
+      </div>
+    );
+  }
 
   const { meId, users } = await listAdminUsers();
 

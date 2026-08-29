@@ -108,7 +108,17 @@ export async function createDedication(
       });
 
       return { ok: true, publicId };
-    } catch {
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : "";
+      const isCollision =
+        /public_id|unique/i.test(detail);
+      if (!isCollision) {
+        console.error("Dedication insert failed.");
+        return {
+          ok: false,
+          error: "Your dedication wasn't submitted. Please try again.",
+        };
+      }
       publicId = generatePublicId();
     }
   }

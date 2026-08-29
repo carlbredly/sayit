@@ -69,7 +69,13 @@ async function seed() {
       retentionDays: 90,
       showStatusOverride: "auto",
     })
-    .onConflictDoNothing();
+    .onConflictDoUpdate({
+      target: settings.id,
+      set: {
+        paypalDonationUrl:
+          process.env.PAYPAL_DONATION_URL || DEFAULT_DONATION_URL,
+      },
+    });
 
   console.log("Settings row ensured.");
   console.log("Seed complete.");

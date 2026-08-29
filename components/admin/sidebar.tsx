@@ -22,19 +22,18 @@ const NAV = [
   { href: "/admin/live", label: "Live Queue", icon: ListOrdered },
   { href: "/admin/live/mode", label: "Live Mode", icon: Clapperboard },
   { href: "/admin/donations", label: "Donations", icon: Wallet },
-  { href: "/admin/users", label: "Users", icon: Users, ownerOnly: true },
+  { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 
 export function AdminSidebar({
   showName,
-  isOwner = false,
 }: {
   showName: string;
   isOwner?: boolean;
 }) {
   const pathname = usePathname();
-  const items = NAV.filter((item) => !item.ownerOnly || isOwner);
+  const items = NAV;
 
   return (
     <aside className="hidden w-64 shrink-0 border-r border-border bg-sidebar lg:flex lg:flex-col">
@@ -77,13 +76,12 @@ export function AdminSidebar({
 
 export function AdminMobileNav({
   showName,
-  isOwner = false,
 }: {
   showName: string;
   isOwner?: boolean;
 }) {
   const pathname = usePathname();
-  const items = NAV.filter((item) => !item.ownerOnly || isOwner);
+  const items = NAV;
 
   return (
     <div className="border-b border-border lg:hidden">

@@ -15,6 +15,7 @@ import {
 import { sanitizeName, sanitizeText } from "@/lib/sanitize";
 import { adminDedicationEditSchema, settingsSchema } from "@/lib/validation";
 import { getSettings } from "@/lib/settings";
+import { getPaypalDonationUrl } from "@/lib/paypal";
 import { runRetentionPolicy } from "@/lib/retention";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 
@@ -356,13 +357,14 @@ export async function updateSettingsAction(input: unknown) {
 
   const db = getDb();
   const data = parsed.data;
+  const paypalDonationUrl = getPaypalDonationUrl(data.paypalDonationUrl);
   await db
     .insert(settings)
     .values({
       id: 1,
       showName: data.showName,
       tiktokUrl: data.tiktokUrl || null,
-      paypalDonationUrl: data.paypalDonationUrl || null,
+      paypalDonationUrl,
       showTime: data.showTime,
       timezone: data.timezone,
       showDurationMinutes: data.showDurationMinutes,
@@ -378,7 +380,7 @@ export async function updateSettingsAction(input: unknown) {
       set: {
         showName: data.showName,
         tiktokUrl: data.tiktokUrl || null,
-        paypalDonationUrl: data.paypalDonationUrl || null,
+        paypalDonationUrl,
         showTime: data.showTime,
         timezone: data.timezone,
         showDurationMinutes: data.showDurationMinutes,
@@ -393,6 +395,7 @@ export async function updateSettingsAction(input: unknown) {
 
   revalidatePath("/");
   revalidatePath("/live");
+  revalidatePath("/success");
   revalidatePath("/admin/settings");
   return { ok: true as const };
 }

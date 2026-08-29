@@ -3,7 +3,6 @@ import { settings } from "@/drizzle/schema";
 import { getDb, isDatabaseConfigured } from "@/lib/db";
 import {
   DEFAULT_DONATION_MESSAGE,
-  DEFAULT_DONATION_URL,
   DEFAULT_MAX_DEDICATION_LENGTH,
   DEFAULT_RETENTION_DAYS,
   DEFAULT_SHOW_DURATION_MINUTES,
@@ -12,6 +11,7 @@ import {
   DEFAULT_TIMEZONE,
   DEFAULT_WHATSAPP_TEMPLATE,
 } from "@/lib/constants";
+import { getPaypalDonationUrl } from "@/lib/paypal";
 
 export type AppSettings = {
   showName: string;
@@ -31,7 +31,7 @@ export function envSettings(): AppSettings {
   return {
     showName: DEFAULT_SHOW_NAME,
     tiktokUrl: process.env.NEXT_PUBLIC_TIKTOK_URL || "https://www.tiktok.com",
-    paypalDonationUrl: process.env.PAYPAL_DONATION_URL || DEFAULT_DONATION_URL,
+    paypalDonationUrl: getPaypalDonationUrl(),
     showTime: DEFAULT_SHOW_TIME,
     timezone: DEFAULT_TIMEZONE,
     showDurationMinutes: DEFAULT_SHOW_DURATION_MINUTES,
@@ -60,7 +60,7 @@ export async function getSettings(): Promise<AppSettings> {
     return {
       showName: row.showName || fallback.showName,
       tiktokUrl: row.tiktokUrl || fallback.tiktokUrl,
-      paypalDonationUrl: row.paypalDonationUrl || fallback.paypalDonationUrl,
+      paypalDonationUrl: getPaypalDonationUrl(row.paypalDonationUrl),
       showTime: row.showTime || fallback.showTime,
       timezone: row.timezone || fallback.timezone,
       showDurationMinutes: row.showDurationMinutes || fallback.showDurationMinutes,

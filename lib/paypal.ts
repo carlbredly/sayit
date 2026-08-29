@@ -4,6 +4,17 @@
  */
 import { DEFAULT_DONATION_URL } from "@/lib/constants";
 
+function isTikTokUrl(value: string) {
+  try {
+    const host = new URL(value).hostname.replace(/^www\./, "").toLowerCase();
+    return host === "tiktok.com" || host.endsWith(".tiktok.com");
+  } catch {
+    return /tiktok\.com/i.test(value);
+  }
+}
+
 export function getPaypalDonationUrl(override?: string | null) {
-  return override || process.env.PAYPAL_DONATION_URL || DEFAULT_DONATION_URL;
+  const candidate = (override || process.env.PAYPAL_DONATION_URL || "").trim();
+  if (candidate && !isTikTokUrl(candidate)) return candidate;
+  return DEFAULT_DONATION_URL;
 }
