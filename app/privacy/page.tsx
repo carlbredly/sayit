@@ -4,8 +4,8 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { getSettings } from "@/lib/settings";
 
 export const metadata: Metadata = {
-  title: "Privacy",
-  description: "How we collect, use, and protect dedication data.",
+  title: "Confidentialité",
+  description: "Comment nous collectons, utilisons et protégeons les données des dédicaces.",
   alternates: { canonical: "/privacy" },
 };
 
@@ -16,58 +16,59 @@ export default async function PrivacyPage() {
     <div className="flex min-h-full flex-1 flex-col">
       <SiteHeader showName={settings.showName} />
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12 sm:px-6">
-        <h1 className="font-display text-4xl font-semibold tracking-tight">Privacy</h1>
+        <h1 className="font-display text-4xl font-semibold tracking-tight">Confidentialité</h1>
         <div className="mt-8 space-y-6 text-muted-foreground">
           <p>
-            {settings.showName} is a dedication platform. We collect only what we
-            need to deliver a live surprise.
+            {settings.showName} est une plateforme de dédicaces. On ne collecte que ce
+            qu&apos;il faut pour livrer une surprise en live.
           </p>
           <section>
-            <h2 className="font-display text-xl font-semibold text-foreground">What we collect</h2>
+            <h2 className="font-display text-xl font-semibold text-foreground">Ce que l&apos;on collecte</h2>
             <p className="mt-2">
-              Sender name (optional), recipient name, recipient WhatsApp number,
-              dedication message, and technical data used to prevent spam
-              (hashed IP). Optional donation details if you choose to give.
+              Nom de l&apos;expéditeur (optionnel), nom du destinataire, numéro WhatsApp
+              du destinataire, message de dédicace, et des données techniques pour
+              limiter le spam (IP hachée). Détails de don optionnels si tu choisis
+              de donner.
             </p>
           </section>
           <section>
             <h2 className="font-display text-xl font-semibold text-foreground">
-              Why we need a WhatsApp number
+              Pourquoi un numéro WhatsApp
             </h2>
             <p className="mt-2">
-              The host contacts the recipient during the TikTok Live. That is the
-              only purpose. Recipient numbers are never shown on public pages,
-              URLs, or share cards.
+              L&apos;hôte contacte le destinataire pendant le live TikTok. C&apos;est le
+              seul usage. Les numéros ne sont jamais affichés sur les pages
+              publiques, les URLs ou les cartes de partage.
             </p>
           </section>
           <section>
-            <h2 className="font-display text-xl font-semibold text-foreground">Who can see it</h2>
+            <h2 className="font-display text-xl font-semibold text-foreground">Qui peut voir</h2>
             <p className="mt-2">
-              Authenticated hosts and admins can see full dedication details,
-              including phone numbers and private notes. The public cannot.
+              Les hôtes et admins authentifiés voient les détails complets, y
+              compris les numéros et les notes internes. Le public ne les voit pas.
             </p>
           </section>
           <section>
-            <h2 className="font-display text-xl font-semibold text-foreground">Donations</h2>
+            <h2 className="font-display text-xl font-semibold text-foreground">Dons</h2>
             <p className="mt-2">
-              Donations are optional and processed through Zelle. We do not store
-              your payment details.
+              Les dons sont optionnels et passent par Zelle. On ne stocke pas tes
+              informations de paiement.
             </p>
           </section>
           <section>
-            <h2 className="font-display text-xl font-semibold text-foreground">Retention</h2>
+            <h2 className="font-display text-xl font-semibold text-foreground">Conservation</h2>
             <p className="mt-2">
-              Dedications may be archived after the live. Admins can permanently
-              delete a dedication, which also removes the recipient&apos;s contact
-              information.
+              Les dédicaces peuvent être archivées après le live. Les admins
+              peuvent supprimer définitivement une dédicace, ce qui retire aussi
+              les coordonnées du destinataire.
             </p>
           </section>
           <section>
-            <h2 className="font-display text-xl font-semibold text-foreground">Deletion requests</h2>
+            <h2 className="font-display text-xl font-semibold text-foreground">Demandes de suppression</h2>
             <p className="mt-2">
-              If you want a dedication removed, contact the host with your
-              Dedication ID. We will delete the record, including sensitive
-              recipient information.
+              Si tu veux retirer une dédicace, contacte l&apos;hôte avec ton identifiant
+              de dédicace. On supprimera l&apos;enregistrement, y compris les
+              informations sensibles du destinataire.
             </p>
           </section>
         </div>

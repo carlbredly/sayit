@@ -18,16 +18,16 @@ export default function ErrorPage({
 
   return (
     <div className="flex min-h-full flex-1 flex-col items-center justify-center px-4 text-center">
-      <h1 className="font-display text-4xl font-semibold">Something went wrong.</h1>
+      <h1 className="font-display text-4xl font-semibold">Un problème est survenu.</h1>
       <p className="mt-3 max-w-md text-muted-foreground">
-        Please try again. If it keeps happening, come back in a moment.
+        Réessaie. Si ça continue, reviens dans un moment.
       </p>
       <div className="mt-8 flex gap-3">
         <button type="button" onClick={reset} className={cn(buttonVariants(), "h-12 px-6")}>
-          Try again
+          Réessayer
         </button>
         <Link href="/" className={cn(buttonVariants({ variant: "outline" }), "h-12 px-6")}>
-          Home
+          Accueil
         </Link>
       </div>
     </div>

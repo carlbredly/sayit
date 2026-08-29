@@ -32,19 +32,19 @@ export function UsersManager({
               toast.error(result.error);
               return;
             }
-            toast.success("User added.");
+            toast.success("Utilisateur ajouté.");
             setName("");
             setEmail("");
             setPassword("");
           });
         }}
       >
-        <h2 className="font-medium">Add user</h2>
+        <h2 className="font-medium">Ajouter un utilisateur</h2>
         <p className="text-sm text-muted-foreground">
-          They can sign in to the dashboard. Only you can turn their access off.
+          Ils pourront se connecter au tableau de bord. Toi seul peux couper leur accès.
         </p>
         <div className="space-y-2">
-          <Label htmlFor="user-name">Name</Label>
+          <Label htmlFor="user-name">Nom</Label>
           <Input
             id="user-name"
             className="h-11"
@@ -54,7 +54,7 @@ export function UsersManager({
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="user-email">Email</Label>
+          <Label htmlFor="user-email">E-mail</Label>
           <Input
             id="user-email"
             type="email"
@@ -65,7 +65,7 @@ export function UsersManager({
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="user-password">Password</Label>
+          <Label htmlFor="user-password">Mot de passe</Label>
           <Input
             id="user-password"
             type="password"
@@ -78,7 +78,7 @@ export function UsersManager({
           />
         </div>
         <Button type="submit" className="h-11" disabled={pending}>
-          {pending ? "Saving..." : "Add user"}
+          {pending ? "Enregistrement..." : "Ajouter"}
         </Button>
       </form>
 
@@ -86,9 +86,9 @@ export function UsersManager({
         <table className="w-full min-w-[640px] text-left text-sm">
           <thead className="bg-muted/40 text-muted-foreground">
             <tr>
-              <th className="px-4 py-3 font-medium">User</th>
-              <th className="px-4 py-3 font-medium">Role</th>
-              <th className="px-4 py-3 font-medium">Access</th>
+              <th className="px-4 py-3 font-medium">Utilisateur</th>
+              <th className="px-4 py-3 font-medium">Rôle</th>
+              <th className="px-4 py-3 font-medium">Accès</th>
             </tr>
           </thead>
           <tbody>
@@ -97,28 +97,28 @@ export function UsersManager({
               return (
                 <tr key={user.id} className="border-t border-border">
                   <td className="px-4 py-4">
-                    <p className="font-medium">{user.name || "Host"}</p>
+                    <p className="font-medium">{user.name || "Hôte"}</p>
                     <p className="text-muted-foreground">{user.email}</p>
                   </td>
                   <td className="px-4 py-4 text-muted-foreground">
-                    {user.isOwner ? "Owner" : "Team"}
+                    {user.isOwner ? "Propriétaire" : "Équipe"}
                   </td>
                   <td className="px-4 py-4">
                     <div className="flex items-center gap-3">
                       <Switch
                         checked={user.isActive}
                         disabled={locked || pending}
-                        aria-label={`Access for ${user.email}`}
+                        aria-label={`Accès de ${user.email}`}
                         onCheckedChange={(checked) =>
                           start(async () => {
                             const result = await setAdminAccess(user.id, checked);
                             if (!result.ok) toast.error(result.error);
-                            else toast.success(checked ? "Access enabled." : "Access turned off.");
+                            else toast.success(checked ? "Accès activé." : "Accès coupé.");
                           })
                         }
                       />
                       <span className={user.isActive ? "text-success" : "text-muted-foreground"}>
-                        {user.isActive ? "On" : "Off"}
+                        {user.isActive ? "Oui" : "Non"}
                       </span>
                     </div>
                   </td>

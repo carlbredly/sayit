@@ -18,7 +18,7 @@ export default async function DedicationDetailPage({
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-2xl font-semibold">Dedication</h1>
+      <h1 className="font-display text-2xl font-semibold">Dédicace</h1>
       <DedicationDetail
         dedication={serializeDedication(dedication)}
         showName={settings.showName}

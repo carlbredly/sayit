@@ -5,8 +5,8 @@ import { DedicationForm } from "@/components/dedication/dedication-form";
 import { getSettings } from "@/lib/settings";
 
 export const metadata: Metadata = {
-  title: "Send a Dedication",
-  description: "Tell us who it's for. We'll read it live.",
+  title: "Envoyer une dédicace",
+  description: "Dis-nous pour qui c'est. On la lira en live.",
   alternates: { canonical: "/dedicate" },
 };
 

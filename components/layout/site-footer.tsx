@@ -24,7 +24,7 @@ export function SiteFooter({
             {showName}
           </p>
           <p className="mt-2 max-w-sm text-sm text-muted-foreground">
-            Heartfelt dedications, read live every Saturday.
+            Dédicaces du cœur, lues en live chaque samedi.
           </p>
         </div>
         <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
@@ -47,10 +47,10 @@ export function SiteFooter({
             </a>
           ) : null}
           <Link href="/privacy" className="hover:text-foreground">
-            Privacy
+            Confidentialité
           </Link>
           <Link href="/terms" className="hover:text-foreground">
-            Terms
+            Conditions
           </Link>
         </nav>
       </div>

@@ -48,6 +48,23 @@ function normalizeOverride(value: string | null | undefined): AppSettings["showS
   return "auto";
 }
 
+function localizeStoredCopy(
+  value: string | null | undefined,
+  fallback: string,
+  keepEmpty = false
+) {
+  if (value == null) return fallback;
+  if (!value.trim()) return keepEmpty ? value : fallback;
+  if (
+    /if you enjoyed|optional donation|we'd love to surprise|we'll be live saturday|hey! ❤️ this is/i.test(
+      value
+    )
+  ) {
+    return fallback;
+  }
+  return value;
+}
+
 export async function getSettings(): Promise<AppSettings> {
   const fallback = envSettings();
   if (!isDatabaseConfigured()) return fallback;
@@ -64,10 +81,13 @@ export async function getSettings(): Promise<AppSettings> {
       showTime: row.showTime || fallback.showTime,
       timezone: row.timezone || fallback.timezone,
       showDurationMinutes: row.showDurationMinutes || fallback.showDurationMinutes,
-      whatsappMessageTemplate:
-        row.whatsappMessageTemplate ?? fallback.whatsappMessageTemplate,
+      whatsappMessageTemplate: localizeStoredCopy(
+        row.whatsappMessageTemplate,
+        fallback.whatsappMessageTemplate,
+        true
+      ),
       maxDedicationLength: row.maxDedicationLength || fallback.maxDedicationLength,
-      donationMessage: row.donationMessage || fallback.donationMessage,
+      donationMessage: localizeStoredCopy(row.donationMessage, fallback.donationMessage),
       retentionDays: row.retentionDays || fallback.retentionDays,
       showStatusOverride: normalizeOverride(row.showStatusOverride),
     };

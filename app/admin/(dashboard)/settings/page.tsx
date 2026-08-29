@@ -7,9 +7,9 @@ export default async function SettingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl font-semibold">Settings</h1>
+        <h1 className="font-display text-2xl font-semibold">Réglages</h1>
         <p className="text-sm text-muted-foreground">
-          Show identity, schedule, WhatsApp template, and donation link.
+          Identité de l&apos;émission, horaires, modèle WhatsApp et lien de don.
         </p>
       </div>
       <SettingsForm initial={settings} />

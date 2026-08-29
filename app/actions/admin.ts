@@ -219,7 +219,7 @@ export async function updateDedicationFields(
   await requireAdmin();
   const parsed = adminDedicationEditSchema.safeParse(fields);
   if (!parsed.success) {
-    return { ok: false as const, error: "Please check the dedication details." };
+    return { ok: false as const, error: "Vérifie les détails de la dédicace." };
   }
 
   const raw = parsed.data.recipientWhatsapp.startsWith("+")
@@ -227,13 +227,13 @@ export async function updateDedicationFields(
     : `+${parsed.data.recipientWhatsapp.replace(/[^\d]/g, "")}`;
   const phone = parsePhoneNumberFromString(raw);
   if (!phone?.isValid()) {
-    return { ok: false as const, error: "Invalid WhatsApp number." };
+    return { ok: false as const, error: "Numéro WhatsApp invalide." };
   }
 
   const recipientName = sanitizeName(parsed.data.recipientName);
   const message = sanitizeText(parsed.data.dedicationMessage, 4000);
   if (!recipientName || !message) {
-    return { ok: false as const, error: "Recipient and message are required." };
+    return { ok: false as const, error: "Le destinataire et le message sont requis." };
   }
 
   const db = getDb();
@@ -352,7 +352,7 @@ export async function updateSettingsAction(input: unknown) {
   await requireAdmin();
   const parsed = settingsSchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false as const, error: "Please check the settings and try again." };
+    return { ok: false as const, error: "Vérifie les réglages et réessaie." };
   }
 
   const db = getDb();

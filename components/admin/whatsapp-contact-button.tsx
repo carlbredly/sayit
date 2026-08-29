@@ -23,7 +23,7 @@ export function WhatsAppContactButton({
   phone,
   message,
   alreadyContacted,
-  label = "Contact on WhatsApp",
+  label = "Contacter sur WhatsApp",
   className,
   compact = false,
 }: {
@@ -68,25 +68,25 @@ export function WhatsAppContactButton({
       <AlertDialog open={ask} onOpenChange={(open) => setAsk(open)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Mark as Contacted?</AlertDialogTitle>
+            <AlertDialogTitle>Marquer comme contacté ?</AlertDialogTitle>
             <AlertDialogDescription>
-              WhatsApp is opening with the pre-filled message. Mark this
-              dedication as contacted once you&apos;ve reached them.
+              WhatsApp s&apos;ouvre avec le message prérempli. Marque cette
+              dédicace comme contactée une fois que tu les as joints.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Not yet</AlertDialogCancel>
+            <AlertDialogCancel>Pas encore</AlertDialogCancel>
             <AlertDialogAction
               disabled={pending}
               onClick={() =>
                 start(async () => {
                   await markContacted(dedicationId);
-                  toast.success("Marked as contacted.");
+                  toast.success("Marqué comme contacté.");
                   setAsk(false);
                 })
               }
             >
-              {pending ? "Saving..." : "Mark as Contacted"}
+              {pending ? "Enregistrement..." : "Marquer comme contacté"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

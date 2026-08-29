@@ -23,7 +23,7 @@ export function HostMode({
   if (!current) {
     return (
       <div className="flex min-h-[70vh] items-center justify-center text-center text-muted-foreground">
-        No dedications in the live queue.
+        Aucune dédicace dans la file live.
       </div>
     );
   }
@@ -35,20 +35,20 @@ export function HostMode({
       <p className="text-sm text-muted-foreground">
         {index + 1} / {items.length}
       </p>
-      <p className="mt-6 text-sm uppercase tracking-[0.25em] text-muted-foreground">For</p>
+      <p className="mt-6 text-sm uppercase tracking-[0.25em] text-muted-foreground">Pour</p>
       <h1 className="mt-2 font-serif text-5xl italic text-primary sm:text-7xl">
         {current.recipientName}
       </h1>
-      <p className="mt-8 text-sm uppercase tracking-[0.25em] text-muted-foreground">From</p>
+      <p className="mt-8 text-sm uppercase tracking-[0.25em] text-muted-foreground">De</p>
       <p className="mt-2 font-display text-2xl sm:text-3xl">
-        {current.isAnonymous ? "Anonymous" : current.senderName}
+        {current.isAnonymous ? "Anonyme" : current.senderName}
       </p>
-      <p className="mt-8 text-sm uppercase tracking-[0.25em] text-muted-foreground">Dedication</p>
+      <p className="mt-8 text-sm uppercase tracking-[0.25em] text-muted-foreground">Dédicace</p>
       <p className="mt-4 whitespace-pre-wrap font-serif text-2xl leading-relaxed sm:text-4xl">
         {current.dedicationMessage}
       </p>
       {current.adminNotes ? (
-        <p className="mt-6 text-sm text-amber-300">Note: {current.adminNotes}</p>
+        <p className="mt-6 text-sm text-amber-300">Note : {current.adminNotes}</p>
       ) : null}
       <div className="mt-12 flex flex-col gap-3 sm:flex-row">
         <Button
@@ -57,14 +57,14 @@ export function HostMode({
           disabled={index === 0}
           onClick={() => setIndex((value) => Math.max(0, value - 1))}
         >
-          Previous
+          Précédent
         </Button>
         <div className="flex-1">
           <WhatsAppContactButton
             dedicationId={current.id}
             phone={current.recipientWhatsapp}
             message={message}
-            label="Contact on WhatsApp"
+            label="Contacter sur WhatsApp"
             className="h-14"
             alreadyContacted={
               current.status === "CONTACTED" || Boolean(current.contactedAt)
@@ -77,7 +77,7 @@ export function HostMode({
           disabled={index >= items.length - 1}
           onClick={() => setIndex((value) => Math.min(items.length - 1, value + 1))}
         >
-          Next
+          Suivant
         </Button>
       </div>
       <div className="mt-3 flex flex-col gap-3 sm:flex-row">
@@ -86,7 +86,7 @@ export function HostMode({
           disabled={pending}
           onClick={() => start(() => markReadLive(current.id))}
         >
-          Mark as Read Live
+          Marquer lu en live
         </Button>
         <Button
           variant="outline"
@@ -94,7 +94,7 @@ export function HostMode({
           disabled={pending}
           onClick={() => start(() => completeDedication(current.id))}
         >
-          Complete
+          Terminer
         </Button>
       </div>
     </div>

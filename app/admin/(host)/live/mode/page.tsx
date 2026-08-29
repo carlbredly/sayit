@@ -11,7 +11,7 @@ export default async function HostModePage() {
     <div>
       <div className="absolute right-4 top-4 z-10">
         <Link href="/admin/live" className="text-sm text-muted-foreground hover:text-foreground">
-          Exit host mode
+          Quitter le mode hôte
         </Link>
       </div>
       <HostMode

@@ -7,9 +7,9 @@ export default async function AdminUsersPage() {
   if (!admin.isOwner) {
     return (
       <div className="space-y-3">
-        <h1 className="font-display text-2xl font-semibold">Users</h1>
+        <h1 className="font-display text-2xl font-semibold">Utilisateurs</h1>
         <p className="text-sm text-muted-foreground">
-          Only the owner can add users and change access.
+          Seul le propriétaire peut ajouter des utilisateurs et modifier les accès.
         </p>
       </div>
     );
@@ -20,9 +20,9 @@ export default async function AdminUsersPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl font-semibold">Users</h1>
+        <h1 className="font-display text-2xl font-semibold">Utilisateurs</h1>
         <p className="text-sm text-muted-foreground">
-          Only you can add team members and turn their access on or off.
+          Toi seul peux ajouter des membres et activer ou couper leur accès.
         </p>
       </div>
       <UsersManager meId={meId} users={users} />

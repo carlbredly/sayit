@@ -16,7 +16,7 @@ export async function loginAction(_prev: unknown, formData: FormData) {
     return { error: null };
   } catch (error) {
     if (error instanceof AuthError) {
-      return { error: "Invalid email or password." };
+      return { error: "E-mail ou mot de passe incorrect." };
     }
     throw error;
   }

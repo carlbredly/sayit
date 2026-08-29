@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { DEDICATION_STATUSES, DONATION_STATUSES } from "@/lib/constants";
+import { DEDICATION_STATUSES, DONATION_STATUSES, ADMIN_STATUS_LABEL, DONATION_STATUS_LABEL } from "@/lib/constants";
 import { Input } from "@/components/ui/input";
 
 export function DedicationFilters() {
@@ -27,7 +27,7 @@ export function DedicationFilters() {
       <Input
         name="q"
         defaultValue={params.get("q") || ""}
-        placeholder="Search name or DED-ID"
+        placeholder="Rechercher un nom ou un DED-ID"
         className="h-10 md:col-span-2"
       />
       <select
@@ -35,10 +35,10 @@ export function DedicationFilters() {
         defaultValue={params.get("status") || ""}
         onChange={(e) => update("status", e.target.value)}
       >
-        <option value="">All statuses</option>
+        <option value="">Tous les statuts</option>
         {DEDICATION_STATUSES.map((status) => (
           <option key={status} value={status}>
-            {status}
+            {ADMIN_STATUS_LABEL[status]}
           </option>
         ))}
       </select>
@@ -47,10 +47,10 @@ export function DedicationFilters() {
         defaultValue={params.get("donation") || ""}
         onChange={(e) => update("donation", e.target.value)}
       >
-        <option value="">All donations</option>
+        <option value="">Tous les dons</option>
         {DONATION_STATUSES.map((status) => (
           <option key={status} value={status}>
-            {status}
+            {DONATION_STATUS_LABEL[status]}
           </option>
         ))}
       </select>
@@ -59,21 +59,21 @@ export function DedicationFilters() {
         defaultValue={params.get("from") || ""}
         onChange={(e) => update("from", e.target.value)}
         className="h-10"
-        aria-label="From date"
+        aria-label="Date de début"
       />
       <Input
         type="date"
         defaultValue={params.get("to") || ""}
         onChange={(e) => update("to", e.target.value)}
         className="h-10"
-        aria-label="To date"
+        aria-label="Date de fin"
       />
       <Input
         type="date"
         defaultValue={params.get("liveDate") || ""}
         onChange={(e) => update("liveDate", e.target.value)}
         className="h-10 md:col-span-2"
-        aria-label="Live date"
+        aria-label="Date du live"
       />
     </form>
   );

@@ -36,7 +36,7 @@ export async function assertRateLimit(key: string, max = RATE_LIMIT_MAX) {
   if ((row?.count ?? 0) >= max) {
     return {
       ok: false as const,
-      error: "Please wait a little before sending another dedication.",
+      error: "Attends un peu avant d'envoyer une autre dédicace.",
     };
   }
 
@@ -52,7 +52,7 @@ export async function verifyTurnstile(token: string | undefined, ip: string) {
   }
 
   if (!token) {
-    return { ok: false as const, error: "Please complete the verification." };
+    return { ok: false as const, error: "Termine la vérification." };
   }
 
   const body = new URLSearchParams({
@@ -71,7 +71,7 @@ export async function verifyTurnstile(token: string | undefined, ip: string) {
 
   const data = (await res.json()) as { success?: boolean };
   if (!data.success) {
-    return { ok: false as const, error: "Verification failed. Please try again." };
+    return { ok: false as const, error: "La vérification a échoué. Réessaie." };
   }
 
   return { ok: true as const };

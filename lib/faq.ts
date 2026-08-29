@@ -1,34 +1,34 @@
 export const FAQ_ITEMS = [
   {
-    q: "Is my dedication free?",
-    a: "Yes. Sending a dedication is free. After you submit, you can optionally support the show with a donation.",
+    q: "La dédicace est-elle gratuite ?",
+    a: "Oui. Envoyer une dédicace est gratuit. Après l’envoi, tu peux éventuellement soutenir l’émission avec un don.",
   },
   {
-    q: "Can I remain anonymous?",
-    a: "Yes. Choose “Keep me anonymous” and we won’t share your name on the live.",
+    q: "Puis-je rester anonyme ?",
+    a: "Oui. Choisis « Rester anonyme » et on ne dira pas ton nom pendant le live.",
   },
   {
-    q: "Why do you need the recipient's WhatsApp?",
-    a: "So we can contact them during the live surprise. The number is private — only the host can see it.",
+    q: "Pourquoi le WhatsApp du destinataire ?",
+    a: "Pour le contacter pendant la surprise en live. Le numéro reste privé — seul l’hôte peut le voir.",
   },
   {
-    q: "When is the TikTok Live?",
-    a: "Every Saturday at 10:00 AM New York time. The countdown on the site always points to the next show.",
+    q: "Quand est le live TikTok ?",
+    a: "Chaque samedi à 10 h, heure de New York. Le compte à rebours du site pointe toujours vers le prochain live.",
   },
   {
-    q: "Will every dedication be read live?",
-    a: "We read as many as we can. We can’t promise every message makes the show, but every submission is reviewed.",
+    q: "Toutes les dédicaces sont-elles lues en live ?",
+    a: "On en lit autant que possible. On ne peut pas garantir que chaque message passe à l’antenne, mais chaque envoi est relu.",
   },
   {
-    q: "Can I donate?",
-    a: "Yes, if you want to. Donations are optional and never required to submit a dedication.",
+    q: "Puis-je faire un don ?",
+    a: "Oui, si tu le souhaites. Les dons sont optionnels et jamais obligatoires pour envoyer une dédicace.",
   },
   {
-    q: "Is my information private?",
-    a: "Recipient phone numbers are never shown publicly. We only use them to reach the person during the live.",
+    q: "Mes informations sont-elles privées ?",
+    a: "Les numéros des destinataires ne sont jamais affichés publiquement. On les utilise seulement pour les joindre pendant le live.",
   },
   {
-    q: "Can I edit my dedication after submitting?",
-    a: "Not from the public form. Save your Dedication ID and reach out if you need a change before the show.",
+    q: "Puis-je modifier ma dédicace après l’envoi ?",
+    a: "Pas depuis le formulaire public. Garde ton identifiant de dédicace et contacte-nous si tu as besoin d’un changement avant le live.",
   },
 ];

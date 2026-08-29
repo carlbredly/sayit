@@ -13,8 +13,8 @@ import { formatShowTimeLabel } from "@/lib/timezone";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Watch Us Live",
-  description: "Join us live every Saturday for heartfelt TikTok dedications.",
+  title: "Nous voir en live",
+  description: "Rejoins-nous en live chaque samedi pour des dédicaces TikTok.",
   alternates: { canonical: "/live" },
 };
 
@@ -29,14 +29,14 @@ export default async function LivePage() {
       <main className="flex-1 px-4 py-12 sm:px-6">
         <div className="mx-auto max-w-3xl text-center">
           <h1 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl">
-            Join us LIVE ❤️
+            Rejoins-nous EN LIVE ❤️
           </h1>
           <p className="mt-3 text-muted-foreground">
-            Every Saturday · {timeLabel}
+            Chaque samedi · {timeLabel}
           </p>
           <div className="mx-auto mt-10 max-w-xl overflow-hidden rounded-[2rem] border border-border bg-card">
             <div className="flex aspect-video items-center justify-center bg-muted/40">
-              <p className="text-sm text-muted-foreground">TikTok Live</p>
+              <p className="text-sm text-muted-foreground">Live TikTok</p>
             </div>
           </div>
           <TrackedExternalLink
@@ -44,7 +44,7 @@ export default async function LivePage() {
             event="tiktok_cta_clicked"
             className={cn(buttonVariants(), "mt-8 h-12 px-8")}
           >
-            Watch Us Live on TikTok
+            Nous voir en live sur TikTok
           </TrackedExternalLink>
           <div className="mx-auto mt-12 flex justify-center">
             <Countdown
@@ -58,26 +58,26 @@ export default async function LivePage() {
 
         <section className="mx-auto mt-16 grid max-w-6xl gap-10 lg:grid-cols-2">
           <div>
-            <h2 className="font-display text-2xl font-semibold">How the show works</h2>
+            <h2 className="font-display text-2xl font-semibold">Comment marche l&apos;émission</h2>
             <p className="mt-4 text-muted-foreground">
-              Viewers send dedications. During the live, the host reaches the
-              recipient on WhatsApp and reads the message out loud. A private
-              feeling, said in public, in the best way.
+              Les spectateurs envoient des dédicaces. Pendant le live, l&apos;hôte
+              joint le destinataire sur WhatsApp et lit le message à voix haute.
+              Un sentiment privé, dit en public, de la plus belle façon.
             </p>
             <Link href="/dedicate" className={cn(buttonVariants({ variant: "outline" }), "mt-6 h-11 px-5")}>
-              Send a Dedication
+              Envoyer une dédicace
             </Link>
           </div>
           {featured ? (
             <div>
-              <h2 className="mb-4 font-display text-2xl font-semibold">Latest featured</h2>
+              <h2 className="mb-4 font-display text-2xl font-semibold">Dernière mise en avant</h2>
               <DedicationCard from={featured.from} to={featured.to} message={featured.message} />
             </div>
           ) : (
             <DedicationCard
-              from="Anonymous"
-              to="You"
-              message="Your dedication could be next. Write it. We'll say it live."
+              from="Anonyme"
+              to="Toi"
+              message="Ta dédicace pourrait être la prochaine. Écris-la. On la dira en live."
             />
           )}
         </section>

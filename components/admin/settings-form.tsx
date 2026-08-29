@@ -24,21 +24,21 @@ export function SettingsForm({ initial }: { initial: AppSettings }) {
         event.preventDefault();
         start(async () => {
           const result = await updateSettingsAction(form);
-          if (result.ok) toast.success("Settings saved.");
+          if (result.ok) toast.success("Réglages enregistrés.");
           else toast.error(result.error);
         });
       }}
     >
       <div className="space-y-2">
-        <Label htmlFor="showName">Show name</Label>
+        <Label htmlFor="showName">Nom de l&apos;émission</Label>
         <Input id="showName" className="h-11" value={form.showName} onChange={(e) => update("showName", e.target.value)} />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="tiktokUrl">TikTok URL</Label>
+        <Label htmlFor="tiktokUrl">URL TikTok</Label>
         <Input id="tiktokUrl" className="h-11" value={form.tiktokUrl} onChange={(e) => update("tiktokUrl", e.target.value)} />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="paypalDonationUrl">Donation URL (Zelle)</Label>
+        <Label htmlFor="paypalDonationUrl">URL de don (Zelle)</Label>
         <Input
           id="paypalDonationUrl"
           className="h-11"
@@ -48,17 +48,17 @@ export function SettingsForm({ initial }: { initial: AppSettings }) {
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="showTime">Saturday show time</Label>
+          <Label htmlFor="showTime">Heure du live samedi</Label>
           <Input id="showTime" className="h-11" value={form.showTime} onChange={(e) => update("showTime", e.target.value)} />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="timezone">Timezone</Label>
+          <Label htmlFor="timezone">Fuseau horaire</Label>
           <Input id="timezone" className="h-11" value={form.timezone} onChange={(e) => update("timezone", e.target.value)} />
         </div>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="duration">Show duration (minutes)</Label>
+          <Label htmlFor="duration">Durée de l&apos;émission (minutes)</Label>
           <Input
             id="duration"
             type="number"
@@ -68,7 +68,7 @@ export function SettingsForm({ initial }: { initial: AppSettings }) {
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="max">Max dedication length</Label>
+          <Label htmlFor="max">Longueur max. de dédicace</Label>
           <Input
             id="max"
             type="number"
@@ -79,20 +79,20 @@ export function SettingsForm({ initial }: { initial: AppSettings }) {
         </div>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="status">Show status</Label>
+        <Label htmlFor="status">Statut de l&apos;émission</Label>
         <select
           id="status"
           className="h-11 w-full rounded-lg border border-input bg-input/30 px-3"
           value={form.showStatusOverride}
           onChange={(e) => update("showStatusOverride", e.target.value as AppSettings["showStatusOverride"])}
         >
-          <option value="auto">Auto from schedule</option>
-          <option value="live">Force live</option>
-          <option value="off">Force off-air</option>
+          <option value="auto">Auto selon l&apos;horaire</option>
+          <option value="live">Forcer en live</option>
+          <option value="off">Forcer hors antenne</option>
         </select>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="wa">WhatsApp message template</Label>
+        <Label htmlFor="wa">Modèle de message WhatsApp</Label>
         <Textarea
           id="wa"
           className="min-h-36 whitespace-pre-wrap"
@@ -100,12 +100,12 @@ export function SettingsForm({ initial }: { initial: AppSettings }) {
           onChange={(e) => update("whatsappMessageTemplate", e.target.value)}
         />
         <p className="text-xs text-muted-foreground">
-          Pre-filled when you click Contact on WhatsApp. Use {"{showName}"} for the
-          show name. Leave empty to open WhatsApp without a message.
+          Prérempli quand tu cliques sur Contacter via WhatsApp. Utilise {"{showName}"} pour le
+          nom de l&apos;émission. Laisse vide pour ouvrir WhatsApp sans message.
         </p>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="donation">Donation message</Label>
+        <Label htmlFor="donation">Message de don</Label>
         <Textarea
           id="donation"
           className="min-h-24"
@@ -114,7 +114,7 @@ export function SettingsForm({ initial }: { initial: AppSettings }) {
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="retention">Retention (days)</Label>
+        <Label htmlFor="retention">Conservation (jours)</Label>
         <Input
           id="retention"
           type="number"
@@ -123,7 +123,7 @@ export function SettingsForm({ initial }: { initial: AppSettings }) {
           onChange={(e) => update("retentionDays", Number(e.target.value))}
         />
         <p className="text-xs text-muted-foreground">
-          Completed, read-live, and rejected dedications older than this are archived.
+          Les dédicaces terminées, lues en live ou refusées plus anciennes que ça sont archivées.
         </p>
         <Button
           type="button"
@@ -132,16 +132,16 @@ export function SettingsForm({ initial }: { initial: AppSettings }) {
           onClick={() =>
             start(async () => {
               const result = await archiveExpiredDedications();
-              if (result.ok) toast.success(`Archived ${result.archived} dedication(s).`);
+              if (result.ok) toast.success(`${result.archived} dédicace(s) archivée(s).`);
               else toast.error(result.error);
             })
           }
         >
-          Archive expired dedications
+          Archiver les dédicaces expirées
         </Button>
       </div>
       <Button type="submit" className="h-11" disabled={pending}>
-        {pending ? "Saving..." : "Save settings"}
+        {pending ? "Enregistrement..." : "Enregistrer"}
       </Button>
     </form>
   );

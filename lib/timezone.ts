@@ -1,5 +1,6 @@
 import { fromZonedTime, toZonedTime } from "date-fns-tz";
 import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import {
   DEFAULT_SHOW_DURATION_MINUTES,
   DEFAULT_SHOW_TIME,
@@ -86,15 +87,13 @@ export function resolveShowPhase(
 
 export function formatShowTimeLabel(showTime: string, timezone: string) {
   const { hours, minutes } = parseShowTime(showTime);
-  const period = hours >= 12 ? "PM" : "AM";
-  const hour12 = hours % 12 || 12;
   const minute = minutes.toString().padStart(2, "0");
   const zone = timezone === "America/New_York" ? "New York" : timezone;
-  return `${hour12}:${minute} ${period} ${zone} Time`;
+  return `${hours.toString().padStart(2, "0")}:${minute}, heure de ${zone}`;
 }
 
 export function formatDateTime(date: Date | string, timezone = DEFAULT_TIMEZONE) {
   const value = typeof date === "string" ? new Date(date) : date;
   const zoned = toZonedTime(value, timezone);
-  return `${format(zoned, "MMM d, yyyy · h:mm a")}`;
+  return format(zoned, "d MMM yyyy · HH:mm", { locale: fr });
 }

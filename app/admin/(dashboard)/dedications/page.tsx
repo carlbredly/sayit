@@ -21,8 +21,8 @@ export default async function AdminDedicationsPage({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl font-semibold">Dedications</h1>
-        <p className="text-sm text-muted-foreground">Review, approve, and prepare the show.</p>
+        <h1 className="font-display text-2xl font-semibold">Dédicaces</h1>
+        <p className="text-sm text-muted-foreground">Relis, approuve et prépare l&apos;émission.</p>
       </div>
       <DedicationFiltersGate />
       <DedicationTable rows={rows.map(serializeDedication)} />

@@ -7,7 +7,7 @@ const ARCHIVABLE = ["COMPLETED", "REJECTED", "READ_LIVE"] as const;
 
 export async function runRetentionPolicy(retentionDays?: number) {
   if (!isDatabaseConfigured()) {
-    return { ok: false as const, error: "Database is not configured.", archived: 0 };
+    return { ok: false as const, error: "La base de données n'est pas configurée.", archived: 0 };
   }
 
   const settings = await getSettings();

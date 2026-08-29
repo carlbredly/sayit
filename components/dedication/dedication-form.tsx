@@ -17,7 +17,7 @@ import { AnimatePresence } from "framer-motion";
 import { StepFade } from "@/components/motion";
 import { Turnstile } from "@/components/dedication/turnstile";
 
-const STEPS = ["Who are you?", "Who is it for?", "Your dedication", "Review"];
+const STEPS = ["Qui es-tu ?", "Pour qui ?", "Ta dédicace", "Vérifier"];
 
 type FormState = {
   isAnonymous: boolean | null;
@@ -82,19 +82,19 @@ export function DedicationForm({
   function validateStep() {
     const next: Record<string, string> = {};
     if (step === 0) {
-      if (form.isAnonymous === null) next.isAnonymous = "Choose how you want to appear.";
+      if (form.isAnonymous === null) next.isAnonymous = "Choisis comment tu veux apparaître.";
       if (form.isAnonymous === false && !form.senderName.trim()) {
-        next.senderName = "Add your name, or stay anonymous.";
+        next.senderName = "Ajoute ton nom, ou reste anonyme.";
       }
     }
     if (step === 1) {
-      if (!form.recipientName.trim()) next.recipientName = "Tell us who it's for.";
-      if (!e164Preview) next.whatsappNational = "Enter a valid WhatsApp number.";
+      if (!form.recipientName.trim()) next.recipientName = "Dis-nous pour qui c'est.";
+      if (!e164Preview) next.whatsappNational = "Entre un numéro WhatsApp valide.";
     }
     if (step === 2) {
-      if (form.message.trim().length < 8) next.message = "Please write a dedication.";
+      if (form.message.trim().length < 8) next.message = "Écris une dédicace.";
       if (form.message.length > maxLength) {
-        next.message = `Keep it under ${maxLength} characters.`;
+        next.message = `Reste sous ${maxLength} caractères.`;
       }
     }
     setFieldErrors(next);
@@ -133,7 +133,7 @@ export function DedicationForm({
 
   return (
     <div className="mx-auto w-full max-w-xl">
-      <ol className="mb-8 grid grid-cols-4 gap-2" aria-label="Form progress">
+      <ol className="mb-8 grid grid-cols-4 gap-2" aria-label="Progression du formulaire">
         {STEPS.map((label, index) => (
           <li key={label} className="flex flex-col gap-2">
             <div
@@ -154,9 +154,9 @@ export function DedicationForm({
         {step === 0 ? (
           <section>
             <h1 className="font-display text-3xl font-semibold tracking-tight">
-              Who is this dedication from?
+              De qui vient cette dédicace ?
             </h1>
-            <p className="mt-2 text-muted-foreground">Choose how you want to appear.</p>
+            <p className="mt-2 text-muted-foreground">Choisis comment tu veux apparaître.</p>
             <div className="mt-8 grid gap-3">
               <button
                 type="button"
@@ -172,9 +172,9 @@ export function DedicationForm({
                   <User className="size-5" />
                 </span>
                 <span>
-                  <span className="block font-medium">Use my name</span>
+                  <span className="block font-medium">Utiliser mon nom</span>
                   <span className="mt-1 block text-sm text-muted-foreground">
-                    We&apos;ll say who it&apos;s from.
+                    On dira de qui ça vient.
                   </span>
                 </span>
                 {form.isAnonymous === false ? (
@@ -195,9 +195,9 @@ export function DedicationForm({
                   <Lock className="size-5" />
                 </span>
                 <span>
-                  <span className="block font-medium">Keep me anonymous</span>
+                  <span className="block font-medium">Rester anonyme</span>
                   <span className="mt-1 block text-sm text-muted-foreground">
-                    Your identity will remain private.
+                    Ton identité restera privée.
                   </span>
                 </span>
                 {form.isAnonymous === true ? (
@@ -207,7 +207,7 @@ export function DedicationForm({
             </div>
             {form.isAnonymous === false ? (
               <div className="mt-6 space-y-2">
-                <Label htmlFor="senderName">Your name</Label>
+                <Label htmlFor="senderName">Ton nom</Label>
                 <Input
                   id="senderName"
                   className="h-12"
@@ -231,14 +231,14 @@ export function DedicationForm({
         {step === 1 ? (
           <section>
             <h1 className="font-display text-3xl font-semibold tracking-tight">
-              Who is it for?
+              Pour qui c&apos;est ?
             </h1>
             <p className="mt-2 text-muted-foreground">
-              We&apos;ll use this number to contact them during the live surprise.
+              On utilisera ce numéro pour les joindre pendant la surprise en live.
             </p>
             <div className="mt-8 space-y-5">
               <div className="space-y-2">
-                <Label htmlFor="recipientName">Recipient&apos;s name</Label>
+                <Label htmlFor="recipientName">Nom du destinataire</Label>
                 <Input
                   id="recipientName"
                   className="h-12"
@@ -252,10 +252,10 @@ export function DedicationForm({
                 ) : null}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="whatsapp">WhatsApp number</Label>
+                <Label htmlFor="whatsapp">Numéro WhatsApp</Label>
                 <div className="flex gap-2">
                   <label className="sr-only" htmlFor="country">
-                    Country code
+                    Indicatif pays
                   </label>
                   <select
                     id="country"
@@ -287,13 +287,13 @@ export function DedicationForm({
                   />
                 </div>
                 {phoneOk ? (
-                  <p className="text-sm text-success">This number looks good.</p>
+                  <p className="text-sm text-success">Ce numéro a l&apos;air bon.</p>
                 ) : null}
                 {fieldErrors.whatsappNational ? (
                   <p className="text-sm text-destructive">{fieldErrors.whatsappNational}</p>
                 ) : (
                   <p className="text-sm text-muted-foreground">
-                    Private. Only used to reach them during the live. Never shown publicly.
+                    Privé. Utilisé seulement pour les joindre pendant le live. Jamais affiché publiquement.
                   </p>
                 )}
               </div>
@@ -304,23 +304,23 @@ export function DedicationForm({
         {step === 2 ? (
           <section>
             <h1 className="font-display text-3xl font-semibold tracking-tight">
-              Write your dedication
+              Écris ta dédicace
             </h1>
             <p className="mt-2 text-muted-foreground">
-              Don&apos;t overthink it. Just say what you feel.
+              N&apos;y réfléchis pas trop. Dis simplement ce que tu ressens.
             </p>
             <div className="mt-8 space-y-2">
-              <Label htmlFor="message">Your message</Label>
+              <Label htmlFor="message">Ton message</Label>
               <Textarea
                 id="message"
                 className="min-h-48 text-base leading-relaxed"
-                placeholder="Write something from your heart..."
+                placeholder="Écris quelque chose qui vient du cœur..."
                 maxLength={maxLength}
                 value={form.message}
                 onChange={(e) => update("message", e.target.value)}
               />
               <div className="flex justify-between text-sm text-muted-foreground">
-                <span>Emojis and line breaks are welcome.</span>
+                <span>Les emojis et les retours à la ligne sont les bienvenus.</span>
                 <span>
                   {form.message.length}/{maxLength}
                 </span>
@@ -335,15 +335,15 @@ export function DedicationForm({
         {step === 3 ? (
           <section>
             <h1 className="font-display text-3xl font-semibold tracking-tight">
-              Review your dedication
+              Vérifie ta dédicace
             </h1>
             <p className="mt-2 text-muted-foreground">
-              Every Saturday at 10:00 AM New York time, we choose dedications to
-              feature during our TikTok Live.
+              Chaque samedi à 10 h, heure de New York, on choisit des dédicaces
+              à lire pendant notre live TikTok.
             </p>
             <div className="mt-8">
               <DedicationCard
-                from={form.isAnonymous ? "Anonymous" : form.senderName || "Anonymous"}
+                from={form.isAnonymous ? "Anonyme" : form.senderName || "Anonyme"}
                 to={form.recipientName}
                 message={form.message}
               />
@@ -352,7 +352,7 @@ export function DedicationForm({
               <Turnstile siteKey={turnstileSiteKey} onToken={setTurnstileToken} />
             ) : (
               <p className="mt-4 text-xs text-muted-foreground">
-                Protected against spam.
+                Protégé contre le spam.
               </p>
             )}
           </section>
@@ -382,12 +382,12 @@ export function DedicationForm({
             onClick={() => setStep((s) => s - 1)}
             disabled={pending}
           >
-            {step === 3 ? "Edit" : "Back"}
+            {step === 3 ? "Modifier" : "Retour"}
           </Button>
         ) : null}
         {step < 3 ? (
           <Button type="button" className="h-12 flex-[2]" onClick={nextStep}>
-            Continue
+            Continuer
           </Button>
         ) : (
           <Button
@@ -397,7 +397,7 @@ export function DedicationForm({
             disabled={pending}
           >
             <Heart className="size-4" />
-            {pending ? "Submitting..." : "Submit Dedication"}
+            {pending ? "Envoi..." : "Envoyer la dédicace"}
           </Button>
         )}
       </div>

@@ -4,20 +4,20 @@ import { FadeIn } from "@/components/motion";
 const STEPS = [
   {
     n: "01",
-    title: "Write",
-    body: "Write something from your heart.",
+    title: "Écrire",
+    body: "Écris quelque chose qui vient du cœur.",
     icon: PencilLine,
   },
   {
     n: "02",
-    title: "Send",
-    body: "Tell us who it's for and their WhatsApp number.",
+    title: "Envoyer",
+    body: "Dis-nous pour qui c’est, et son numéro WhatsApp.",
     icon: Send,
   },
   {
     n: "03",
-    title: "Surprise",
-    body: "We'll contact them and read your dedication live on TikTok.",
+    title: "Surprendre",
+    body: "On les contacte et on lit ta dédicace en live TikTok.",
     icon: Heart,
   },
 ];
@@ -28,7 +28,7 @@ export function HowItWorks() {
       <div className="relative mx-auto max-w-5xl">
         <FadeIn>
           <h2 className="flex items-center justify-center gap-3 text-center font-display text-3xl font-semibold sm:text-4xl">
-            How It Works
+            Comment ça marche
             <Heart className="size-6 text-primary" strokeWidth={1.75} />
           </h2>
         </FadeIn>

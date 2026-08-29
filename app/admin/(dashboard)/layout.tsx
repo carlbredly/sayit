@@ -7,7 +7,7 @@ import { ensureOwnerExists, getAdminById } from "@/lib/admin-guard";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Admin",
+  title: "Administration",
   robots: { index: false, follow: false },
 };
 

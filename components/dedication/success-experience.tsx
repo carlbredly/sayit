@@ -7,6 +7,8 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { recordDonationIntent } from "@/app/actions/dedications";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
+import { DEFAULT_DONATION_URL } from "@/lib/constants";
+import { getPaypalDonationUrl } from "@/lib/paypal";
 
 export function SuccessExperience({
   publicId,
@@ -21,6 +23,7 @@ export function SuccessExperience({
 }) {
   const [phase, setPhase] = useState<"success" | "done">("success");
   const [copied, setCopied] = useState(false);
+  const donationUrl = getPaypalDonationUrl(paypalUrl) || DEFAULT_DONATION_URL;
 
   useEffect(() => {
     if (publicId.startsWith("DED-") && publicId !== "DED-XXXXX") {
@@ -39,10 +42,10 @@ export function SuccessExperience({
       <div className="mx-auto max-w-lg px-4 py-16 text-center">
         <Heart className="mx-auto size-10 text-primary" />
         <h1 className="mt-6 font-display text-4xl font-semibold tracking-tight">
-          See you Saturday ❤️
+          À samedi ❤️
         </h1>
         <p className="mt-3 text-muted-foreground">
-          Keep an eye on the live. Your dedication could be the next surprise.
+          Garde un œil sur le live. Ta dédicace pourrait être la prochaine surprise.
         </p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
           <a
@@ -52,10 +55,10 @@ export function SuccessExperience({
             onClick={() => track("tiktok_cta_clicked")}
             className={cn(buttonVariants(), "h-12 px-6")}
           >
-            Watch Us Live
+            Nous voir en live
           </a>
           <Link href="/" className={cn(buttonVariants({ variant: "outline" }), "h-12 px-6")}>
-            Back home
+            Retour à l&apos;accueil
           </Link>
         </div>
       </div>
@@ -68,61 +71,60 @@ export function SuccessExperience({
         <Check className="size-8" />
       </div>
       <h1 className="mt-6 font-display text-4xl font-semibold tracking-tight">
-        Your dedication is on its way. ❤️
-      </h1>
-      <p className="mt-4 text-muted-foreground">
-        We&apos;ve received your message. Keep an eye on our Saturday TikTok Live —
-        your dedication could be the next surprise.
-      </p>
+        Ta dédicace est en route. ❤️
+        </h1>
+        <p className="mt-4 text-muted-foreground">
+          On a bien reçu ton message. Garde un œil sur notre live TikTok du samedi —
+          ta dédicace pourrait être la prochaine surprise.
+        </p>
       <div className="mt-8 rounded-2xl border border-border bg-card p-5">
         <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-          Dedication ID
+          Identifiant de dédicace
         </p>
         <div className="mt-2 flex items-center justify-center gap-2">
           <p className="font-mono text-xl tracking-wide">{publicId}</p>
-          <Button variant="ghost" size="icon" onClick={copyId} aria-label="Copy dedication ID">
+          <Button variant="ghost" size="icon" onClick={copyId} aria-label="Copier l'identifiant">
             {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
           </Button>
         </div>
-        <p className="mt-2 text-sm text-muted-foreground">Save this ID for your records.</p>
+        <p className="mt-2 text-sm text-muted-foreground">Garde cet identifiant précieusement.</p>
         {publicId !== "DED-XXXXX" ? (
           <Link
             href={`/dedication/${publicId}`}
             className="mt-3 inline-block text-sm text-primary hover:underline"
           >
-            View confirmation
+            Voir la confirmation
           </Link>
         ) : null}
       </div>
 
       <div className="mt-10 rounded-[2rem] border border-primary/20 bg-primary/10 px-6 py-8">
         <h2 className="font-display text-2xl font-semibold tracking-tight">
-          Want to support the show? ❤️
+          Envie de soutenir l&apos;émission ? ❤️
         </h2>
         <p className="mt-3 text-muted-foreground">{donationMessage}</p>
         <p className="mt-2 text-sm text-muted-foreground">
-          Completely optional. Your dedication is already saved.
+          Entièrement optionnel. Ta dédicace est déjà enregistrée.
         </p>
         <div className="mt-6 flex flex-col gap-3">
-          {paypalUrl ? (
+          {donationUrl ? (
             <a
-              href={paypalUrl}
+              href={donationUrl}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               onClick={() => {
                 track("donation_cta_clicked");
                 void recordDonationIntent(publicId, "PENDING");
-                setPhase("done");
               }}
               className="inline-flex h-12 items-center justify-center rounded-lg bg-[#6D1ED4] px-6 font-semibold text-white"
             >
-              Support the Show
+              Soutenir l&apos;émission
             </a>
           ) : (
-            <p className="text-sm text-muted-foreground">Donations aren&apos;t configured yet.</p>
+            <p className="text-sm text-muted-foreground">Les dons ne sont pas encore configurés.</p>
           )}
           <Button variant="ghost" className="h-12" onClick={() => setPhase("done")}>
-            Maybe later
+            Plus tard
           </Button>
         </div>
       </div>

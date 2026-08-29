@@ -44,7 +44,7 @@ function SortableRow({
       <button
         type="button"
         className="mt-1 cursor-grab text-muted-foreground"
-        aria-label="Drag to reorder"
+        aria-label="Glisser pour réordonner"
         {...attributes}
         {...listeners}
       >
@@ -56,11 +56,11 @@ function SortableRow({
           <StatusBadge status={item.status as DedicationStatus} />
         </div>
         <p className="text-sm text-muted-foreground">
-          From {item.isAnonymous ? "Anonymous" : item.senderName}
+          De {item.isAnonymous ? "Anonyme" : item.senderName}
         </p>
         <p className="mt-2 line-clamp-2 text-sm">{item.dedicationMessage}</p>
         {item.adminNotes ? (
-          <p className="mt-2 text-xs text-amber-300">Note: {item.adminNotes}</p>
+          <p className="mt-2 text-xs text-amber-300">Note : {item.adminNotes}</p>
         ) : null}
       </div>
       <WhatsAppContactButton
@@ -101,7 +101,7 @@ export function LiveQueueList({
   if (queue.length === 0) {
     return (
       <p className="rounded-2xl border border-border bg-card p-10 text-center text-muted-foreground">
-        Approve dedications to build tonight&apos;s queue.
+        Approuve des dédicaces pour construire la file du live.
       </p>
     );
   }

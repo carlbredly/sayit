@@ -53,7 +53,7 @@ export function Countdown({
             <span className="absolute inline-flex size-full animate-ping rounded-full bg-red-500 opacity-75" />
             <span className="relative inline-flex size-2.5 rounded-full bg-red-500" />
           </span>
-          🔴 WE&apos;RE LIVE NOW
+          🔴 ON EST EN LIVE
         </p>
       </div>
     );
@@ -66,10 +66,10 @@ export function Countdown({
   const seconds = Math.floor((diff % 60_000) / 1000);
 
   const units = [
-    { label: "Days", value: pad(days) },
-    { label: "Hours", value: pad(hours) },
+    { label: "Jours", value: pad(days) },
+    { label: "Heures", value: pad(hours) },
     { label: "Minutes", value: pad(minutes) },
-    { label: "Seconds", value: pad(seconds) },
+    { label: "Secondes", value: pad(seconds) },
   ];
 
   return (
@@ -79,10 +79,10 @@ export function Countdown({
         className
       )}
       aria-live="polite"
-      aria-label="Countdown to next live show"
+      aria-label="Compte à rebours jusqu'au prochain live"
     >
       <p className="text-center text-sm font-medium text-white">
-        Next Live: Saturday at {formatShowTimeLabel(showTime, timezone)}
+        Prochain live : samedi à {formatShowTimeLabel(showTime, timezone)}
       </p>
       <div className="mt-4 grid grid-cols-4">
         {units.map((unit, index) => (
@@ -131,14 +131,14 @@ export function ShowStatusBadge({
     return (
       <span className="inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1 text-xs font-medium text-red-300">
         <span className="size-1.5 rounded-full bg-red-500" />
-        🔴 WE&apos;RE LIVE NOW
+        🔴 ON EST EN LIVE
       </span>
     );
   }
 
   return (
     <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
-      Next Live: Saturday at {formatShowTimeLabel(showTime, timezone)}
+      Prochain live : samedi à {formatShowTimeLabel(showTime, timezone)}
     </span>
   );
 }

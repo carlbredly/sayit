@@ -27,9 +27,9 @@ export function DedicationEditForm({
   return (
     <div className="rounded-3xl border border-border bg-card p-5">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="font-medium">Edit dedication</h2>
+        <h2 className="font-medium">Modifier la dédicace</h2>
         <Button type="button" variant="outline" size="sm" onClick={() => setOpen((v) => !v)}>
-          {open ? "Close" : "Edit"}
+          {open ? "Fermer" : "Modifier"}
         </Button>
       </div>
       {open ? (
@@ -40,7 +40,7 @@ export function DedicationEditForm({
             start(async () => {
               const result = await updateDedicationFields(dedication.id, form);
               if (result.ok) {
-                toast.success("Dedication updated.");
+                toast.success("Dédicace mise à jour.");
                 setOpen(false);
               } else {
                 toast.error(result.error);
@@ -54,11 +54,11 @@ export function DedicationEditForm({
               checked={form.isAnonymous}
               onChange={(e) => setForm((prev) => ({ ...prev, isAnonymous: e.target.checked }))}
             />
-            Keep sender anonymous
+            Garder l&apos;expéditeur anonyme
           </label>
           {!form.isAnonymous ? (
             <div className="space-y-2">
-              <Label htmlFor="edit-sender">Sender name</Label>
+              <Label htmlFor="edit-sender">Nom de l&apos;expéditeur</Label>
               <Input
                 id="edit-sender"
                 className="h-10"
@@ -68,7 +68,7 @@ export function DedicationEditForm({
             </div>
           ) : null}
           <div className="space-y-2">
-            <Label htmlFor="edit-recipient">Recipient name</Label>
+            <Label htmlFor="edit-recipient">Nom du destinataire</Label>
             <Input
               id="edit-recipient"
               className="h-10"
@@ -77,7 +77,7 @@ export function DedicationEditForm({
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="edit-wa">WhatsApp (E.164)</Label>
+            <Label htmlFor="edit-wa">WhatsApp (international)</Label>
             <Input
               id="edit-wa"
               className="h-10 font-mono"
@@ -86,7 +86,7 @@ export function DedicationEditForm({
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="edit-message">Dedication</Label>
+            <Label htmlFor="edit-message">Dédicace</Label>
             <Textarea
               id="edit-message"
               className="min-h-32"
@@ -97,7 +97,7 @@ export function DedicationEditForm({
             />
           </div>
           <Button type="submit" disabled={pending}>
-            {pending ? "Saving..." : "Save changes"}
+            {pending ? "Enregistrement..." : "Enregistrer"}
           </Button>
         </form>
       ) : null}

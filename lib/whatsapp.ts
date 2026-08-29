@@ -9,7 +9,7 @@ export function normalizeWhatsApp(countryDial: string, nationalNumber: string) {
 export function validateWhatsApp(countryDial: string, nationalNumber: string) {
   const parsed = normalizeWhatsApp(countryDial, nationalNumber);
   if (!parsed || !parsed.isValid()) {
-    return { ok: false as const, error: "Invalid WhatsApp number." };
+    return { ok: false as const, error: "Numéro WhatsApp invalide." };
   }
   return { ok: true as const, e164: parsed.number };
 }
@@ -31,5 +31,5 @@ export function fillWhatsAppTemplate(
 ) {
   return template
     .replaceAll("{showName}", values.showName)
-    .replaceAll("{showTime}", values.showTime || "10:00 AM New York time");
+    .replaceAll("{showTime}", values.showTime || "10 h, heure de New York");
 }

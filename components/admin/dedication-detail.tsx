@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { SerializedDedication } from "@/lib/serialize";
 import type { DedicationStatus, DonationStatus } from "@/lib/constants";
+import { DONATION_STATUS_LABEL } from "@/lib/constants";
 import { StatusBadge } from "@/components/admin/status-badge";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -50,13 +51,13 @@ export function DedicationDetail({
         </div>
         <dl className="mt-6 space-y-5">
           <div>
-            <dt className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Sender</dt>
+            <dt className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Expéditeur</dt>
             <dd className="mt-1 text-lg">
-              {dedication.isAnonymous ? "Anonymous" : dedication.senderName}
+              {dedication.isAnonymous ? "Anonyme" : dedication.senderName}
             </dd>
           </div>
           <div>
-            <dt className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Recipient</dt>
+            <dt className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Destinataire</dt>
             <dd className="mt-1 font-serif text-3xl italic text-primary">
               {dedication.recipientName}
             </dd>
@@ -66,13 +67,13 @@ export function DedicationDetail({
             <dd className="mt-1 font-mono">{dedication.recipientWhatsapp}</dd>
           </div>
           <div>
-            <dt className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Dedication</dt>
+            <dt className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Dédicace</dt>
             <dd className="mt-2 whitespace-pre-wrap text-lg leading-relaxed">
               {dedication.dedicationMessage}
             </dd>
           </div>
           <div>
-            <dt className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Submitted</dt>
+            <dt className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Envoyée</dt>
             <dd className="mt-1">{formatDateTime(dedication.submittedAt)}</dd>
           </div>
         </dl>
@@ -91,33 +92,33 @@ export function DedicationDetail({
               }
             />
             <Button variant="outline" disabled={pending} onClick={() => start(() => markContacted(dedication.id))}>
-              Mark Contacted
+              Marquer contacté
             </Button>
             <Button variant="outline" disabled={pending} onClick={() => start(() => updateDedicationStatus(dedication.id, "APPROVED"))}>
-              Approve
+              Approuver
             </Button>
             <Button variant="outline" disabled={pending} onClick={() => start(() => markReadLive(dedication.id))}>
-              Mark Read Live
+              Marquer lu en live
             </Button>
             <Button variant="outline" disabled={pending} onClick={() => start(() => completeDedication(dedication.id))}>
-              Complete
+              Terminer
             </Button>
             <Button variant="destructive" disabled={pending} onClick={() => start(() => rejectDedication(dedication.id))}>
-              Reject
+              Refuser
             </Button>
             <Button
               variant="outline"
               disabled={pending}
               onClick={() => start(() => updateDedicationStatus(dedication.id, "ARCHIVED"))}
             >
-              Archive
+              Archiver
             </Button>
             <Button
               variant="outline"
               disabled={pending}
               onClick={() => start(() => setFeatured(dedication.id, !dedication.featured))}
             >
-              {dedication.featured ? "Unfeature" : "Feature on site"}
+              {dedication.featured ? "Retirer de l'accueil" : "Mettre en avant"}
             </Button>
           </div>
         </div>
@@ -125,7 +126,7 @@ export function DedicationDetail({
         <DedicationEditForm dedication={dedication} />
 
         <div className="rounded-3xl border border-border bg-card p-5">
-          <h2 className="font-medium">Internal notes</h2>
+          <h2 className="font-medium">Notes internes</h2>
           <Textarea className="mt-3 min-h-28" value={notes} onChange={(e) => setNotes(e.target.value)} />
           <Button
             className="mt-3"
@@ -133,15 +134,18 @@ export function DedicationDetail({
             disabled={pending}
             onClick={() => start(() => updateAdminNotes(dedication.id, notes))}
           >
-            Save notes
+            Enregistrer les notes
           </Button>
         </div>
 
         <div className="rounded-3xl border border-border bg-card p-5">
-          <h2 className="font-medium">Donation</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{dedication.donationStatus}</p>
+          <h2 className="font-medium">Don</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {DONATION_STATUS_LABEL[dedication.donationStatus as DonationStatus] ||
+              dedication.donationStatus}
+          </p>
           <Label htmlFor="amount" className="mt-4">
-            Amount
+            Montant
           </Label>
           <Input id="amount" className="mt-2 h-10" value={amount} onChange={(e) => setAmount(e.target.value)} />
           <Button
@@ -159,7 +163,7 @@ export function DedicationDetail({
               )
             }
           >
-            Mark donation completed
+            Marquer le don comme confirmé
           </Button>
         </div>
 
@@ -173,7 +177,7 @@ export function DedicationDetail({
             })
           }
         >
-          Delete permanently
+          Supprimer définitivement
         </Button>
       </aside>
     </div>

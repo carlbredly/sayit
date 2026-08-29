@@ -38,18 +38,18 @@ async function seed() {
   if (existing) {
     await db
       .update(admins)
-      .set({ passwordHash, name: "Host", isOwner: true, isActive: true })
+      .set({ passwordHash, name: "Hôte", isOwner: true, isActive: true })
       .where(eq(admins.email, email));
-    console.log(`Updated admin password for ${email}`);
+    console.log(`Mot de passe admin mis à jour pour ${email}`);
   } else {
     await db.insert(admins).values({
       email,
       passwordHash,
-      name: "Host",
+      name: "Hôte",
       isOwner: true,
       isActive: true,
     });
-    console.log(`Created admin ${email}`);
+    console.log(`Admin créé : ${email}`);
   }
 
   await db
@@ -58,8 +58,7 @@ async function seed() {
       id: 1,
       showName: "Say It",
       tiktokUrl: process.env.NEXT_PUBLIC_TIKTOK_URL || null,
-      paypalDonationUrl:
-        process.env.PAYPAL_DONATION_URL || DEFAULT_DONATION_URL,
+      paypalDonationUrl: DEFAULT_DONATION_URL,
       showTime: "10:00",
       timezone: "America/New_York",
       showDurationMinutes: 90,
@@ -72,13 +71,14 @@ async function seed() {
     .onConflictDoUpdate({
       target: settings.id,
       set: {
-        paypalDonationUrl:
-          process.env.PAYPAL_DONATION_URL || DEFAULT_DONATION_URL,
+        paypalDonationUrl: DEFAULT_DONATION_URL,
+        whatsappMessageTemplate: DEFAULT_WHATSAPP_TEMPLATE,
+        donationMessage: DEFAULT_DONATION_MESSAGE,
       },
     });
 
-  console.log("Settings row ensured.");
-  console.log("Seed complete.");
+  console.log("Réglages enregistrés.");
+  console.log("Seed terminé.");
 }
 
 seed().catch((error) => {

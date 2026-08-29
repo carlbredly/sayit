@@ -6,7 +6,7 @@ import { getSettings } from "@/lib/settings";
 import { getAdminById } from "@/lib/admin-guard";
 
 export const metadata = {
-  title: "Admin login",
+  title: "Connexion admin",
   robots: { index: false, follow: false },
 };
 
@@ -23,10 +23,10 @@ export default async function AdminLoginPage({
     return (
       <div className="flex min-h-full flex-1 items-center justify-center px-4">
         <div className="w-full max-w-sm rounded-3xl border border-border bg-card p-8 text-center">
-          <h1 className="font-display text-2xl font-semibold">Admin is not configured</h1>
+          <h1 className="font-display text-2xl font-semibold">Admin non configuré</h1>
           <p className="mt-3 text-sm text-muted-foreground">
-            Set <code className="text-foreground">AUTH_SECRET</code> in the Vercel project
-            environment variables, then redeploy.
+            Définis <code className="text-foreground">AUTH_SECRET</code> dans les
+            variables d&apos;environnement Vercel, puis redéploie.
           </p>
         </div>
       </div>
@@ -46,8 +46,8 @@ export default async function AdminLoginPage({
       <div className="w-full max-w-sm rounded-3xl border border-border bg-card p-8">
         <div className="mb-8 text-center">
           <Heart className="mx-auto size-8 text-primary" />
-          <h1 className="mt-4 font-display text-2xl font-semibold">Welcome back</h1>
-          <p className="mt-1 text-sm text-muted-foreground">{settings.showName} host login</p>
+          <h1 className="mt-4 font-display text-2xl font-semibold">Bon retour</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Connexion hôte {settings.showName}</p>
         </div>
         <LoginForm expired={expired === "1"} disabled={disabled === "1"} />
       </div>

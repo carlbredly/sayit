@@ -17,13 +17,13 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 const NAV = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/admin/dedications", label: "Dedications", icon: Heart },
-  { href: "/admin/live", label: "Live Queue", icon: ListOrdered },
-  { href: "/admin/live/mode", label: "Live Mode", icon: Clapperboard },
-  { href: "/admin/donations", label: "Donations", icon: Wallet },
-  { href: "/admin/users", label: "Users", icon: Users },
-  { href: "/admin/settings", label: "Settings", icon: Settings },
+  { href: "/admin", label: "Tableau de bord", icon: LayoutDashboard },
+  { href: "/admin/dedications", label: "Dédicaces", icon: Heart },
+  { href: "/admin/live", label: "File live", icon: ListOrdered },
+  { href: "/admin/live/mode", label: "Mode live", icon: Clapperboard },
+  { href: "/admin/donations", label: "Dons", icon: Wallet },
+  { href: "/admin/users", label: "Utilisateurs", icon: Users },
+  { href: "/admin/settings", label: "Réglages", icon: Settings },
 ];
 
 export function AdminSidebar({
@@ -67,7 +67,7 @@ export function AdminSidebar({
       <form action={logoutAction} className="border-t border-border p-3">
         <Button variant="ghost" className="w-full justify-start text-muted-foreground" type="submit">
           <LogOut className="size-4" />
-          Logout
+          Déconnexion
         </Button>
       </form>
     </aside>
@@ -89,7 +89,7 @@ export function AdminMobileNav({
         <p className="font-display font-semibold">{showName}</p>
         <form action={logoutAction}>
           <Button variant="ghost" size="sm" type="submit">
-            Logout
+            Déconnexion
           </Button>
         </form>
       </div>

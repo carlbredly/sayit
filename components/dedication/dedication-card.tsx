@@ -28,13 +28,13 @@ export function DedicationCard({
       <div className="relative grid gap-5 sm:grid-cols-2">
         <div>
           <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-white/40">
-            From
+            De
           </p>
           <p className="mt-1.5 font-display text-lg font-medium text-white">{from}</p>
         </div>
         <div className="sm:text-right">
           <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-white/40">
-            To
+            Pour
           </p>
           <p className="mt-1.5 font-serif text-2xl italic text-primary">{to}</p>
         </div>
@@ -43,7 +43,7 @@ export function DedicationCard({
       <div className="relative my-6 h-px bg-gradient-to-r from-transparent via-primary/45 to-transparent" />
 
       <p className="relative text-[11px] font-medium uppercase tracking-[0.28em] text-white/40">
-        Message
+        Dédicace
       </p>
       <blockquote className="relative mt-3 font-serif text-xl leading-relaxed text-white/90 sm:text-[1.35rem]">
         <span aria-hidden className="mr-1 text-3xl leading-none text-primary/70">

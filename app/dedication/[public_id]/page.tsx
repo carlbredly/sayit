@@ -14,13 +14,13 @@ import { cn } from "@/lib/utils";
 export const dynamic = "force-dynamic";
 
 const STATUS_COPY: Record<string, string> = {
-  Received: "We've got your message. Keep an eye on Saturday's TikTok Live.",
-  Selected: "This dedication was chosen for the show.",
-  Contacted: "The recipient has been reached for the live surprise.",
-  "Read live": "This dedication was read during the live.",
-  Completed: "This dedication was featured on the live.",
-  "Not featured": "This one didn't make the live. Thank you for sending it.",
-  Archived: "This dedication has been archived.",
+  Reçue: "On a bien reçu ton message. Garde un œil sur le live TikTok du samedi.",
+  Sélectionnée: "Cette dédicace a été choisie pour l'émission.",
+  Contacté: "Le destinataire a été joint pour la surprise en live.",
+  "Lue en live": "Cette dédicace a été lue pendant le live.",
+  Terminée: "Cette dédicace a été présentée en live.",
+  "Non retenue": "Celle-ci n'a pas passé au live. Merci de l'avoir envoyée.",
+  Archivée: "Cette dédicace a été archivée.",
 };
 
 export async function generateMetadata({
@@ -33,8 +33,8 @@ export async function generateMetadata({
   const valid = isValidPublicId(publicId);
 
   return {
-    title: valid ? `Dedication ${publicId}` : "Dedication",
-    description: "Confirmation for your dedication.",
+    title: valid ? `Dédicace ${publicId}` : "Dédicace",
+    description: "Confirmation de ta dédicace.",
     robots: {
       index: false,
       follow: false,
@@ -42,13 +42,13 @@ export async function generateMetadata({
       googleBot: { index: false, follow: false, noimageindex: true },
     },
     openGraph: {
-      title: valid ? `Dedication ${publicId}` : "Dedication",
-      description: "Confirmation for your dedication.",
+      title: valid ? `Dédicace ${publicId}` : "Dédicace",
+      description: "Confirmation de ta dédicace.",
     },
     twitter: {
       card: "summary",
-      title: valid ? `Dedication ${publicId}` : "Dedication",
-      description: "Confirmation for your dedication.",
+      title: valid ? `Dédicace ${publicId}` : "Dédicace",
+      description: "Confirmation de ta dédicace.",
     },
   };
 }
@@ -72,19 +72,19 @@ export default async function DedicationPublicPage({
     <div className="flex min-h-full flex-1 flex-col">
       <SiteHeader showName={settings.showName} />
       <main className="mx-auto w-full max-w-xl flex-1 px-4 py-12 sm:px-6">
-        <p className="text-sm text-muted-foreground">Your dedication</p>
+        <p className="text-sm text-muted-foreground">Ta dédicace</p>
         <h1 className="mt-2 font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-          Dedication {dedication.publicId}
+          Dédicace {dedication.publicId}
         </h1>
 
         <div className="mt-8 rounded-2xl border border-border bg-card px-5 py-5">
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Status</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Statut</p>
           <p className="mt-2 font-display text-2xl font-semibold">{dedication.status}</p>
           <p className="mt-2 text-sm text-muted-foreground">
-            {STATUS_COPY[dedication.status] || "We've received your message."}
+            {STATUS_COPY[dedication.status] || "On a bien reçu ton message."}
           </p>
           <p className="mt-4 text-xs text-muted-foreground">
-            Submitted {formatDateTime(dedication.submittedAt, settings.timezone)}
+            Envoyée {formatDateTime(dedication.submittedAt, settings.timezone)}
           </p>
         </div>
 
@@ -94,10 +94,10 @@ export default async function DedicationPublicPage({
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Link href="/live" className={cn(buttonVariants(), "h-11")}>
-            Watch the live
+            Voir le live
           </Link>
           <Link href="/dedicate" className={cn(buttonVariants({ variant: "outline" }), "h-11")}>
-            Send another
+            En envoyer une autre
           </Link>
         </div>
       </main>

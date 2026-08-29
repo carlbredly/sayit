@@ -34,29 +34,29 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Send a Dedication ❤️ | Live TikTok Dedications",
+    default: "Envoyer une dédicace ❤️ | Dédicaces TikTok en live",
     template: "%s | Say It",
   },
   description:
-    "Send a heartfelt dedication to someone special and let us surprise them live on TikTok every Saturday.",
+    "Envoie une dédicace à quelqu'un de spécial et on la surprendra en live TikTok chaque samedi.",
   applicationName: "Say It",
-  keywords: ["TikTok live", "dedication", "love message", "surprise", "WhatsApp"],
+  keywords: ["TikTok live", "dédicace", "message d'amour", "surprise", "WhatsApp"],
   authors: [{ name: "Say It" }],
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
-    locale: "en_US",
+    locale: "fr_FR",
     url: siteUrl,
     siteName: "Say It",
-    title: "Send a Dedication ❤️ | Live TikTok Dedications",
+    title: "Envoyer une dédicace ❤️ | Dédicaces TikTok en live",
     description:
-      "Send a heartfelt dedication to someone special and let us surprise them live on TikTok every Saturday.",
+      "Envoie une dédicace à quelqu'un de spécial et on la surprendra en live TikTok chaque samedi.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Send a Dedication ❤️ | Live TikTok Dedications",
+    title: "Envoyer une dédicace ❤️ | Dédicaces TikTok en live",
     description:
-      "Send a heartfelt dedication to someone special and let us surprise them live on TikTok every Saturday.",
+      "Envoie une dédicace à quelqu'un de spécial et on la surprendra en live TikTok chaque samedi.",
   },
   robots: {
     index: true,
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en"
+      lang="fr"
       className={`dark ${inter.variable} ${jakarta.variable} ${playfair.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="relative min-h-full flex flex-col">

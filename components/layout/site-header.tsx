@@ -8,8 +8,8 @@ import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
 const LINKS = [
-  { href: "/#how-it-works", label: "How It Works" },
-  { href: "/#schedule", label: "Schedule" },
+  { href: "/#how-it-works", label: "Comment ça marche" },
+  { href: "/#schedule", label: "Horaires" },
   { href: "/live", label: "Live" },
   { href: "/faq", label: "FAQ" },
 ];
@@ -40,13 +40,13 @@ export function SiteHeader({ showName }: { showName: string }) {
             href="/dedicate"
             className={cn(buttonVariants(), "hidden h-10 px-4 md:inline-flex")}
           >
-            Send a Dedication
+            Envoyer une dédicace
           </Link>
           <Button
             variant="ghost"
             size="icon"
             className="md:hidden"
-            aria-label="Open menu"
+            aria-label="Ouvrir le menu"
             onClick={() => setOpen(true)}
           >
             <Menu className="size-5" />
@@ -73,7 +73,7 @@ export function SiteHeader({ showName }: { showName: string }) {
               onClick={() => setOpen(false)}
               className={cn(buttonVariants(), "mt-4 h-12")}
             >
-              Send a Dedication
+              Envoyer une dédicace
             </Link>
           </div>
         </SheetContent>

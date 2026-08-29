@@ -25,7 +25,7 @@ export async function createDedication(
   if (!isDatabaseConfigured()) {
     return {
       ok: false,
-      error: "The show isn't accepting dedications just yet. Please try again soon.",
+      error: "L'émission n'accepte pas encore les dédicaces. Réessaie bientôt.",
     };
   }
 
@@ -40,7 +40,7 @@ export async function createDedication(
     }
     return {
       ok: false,
-      error: "Please check the form and try again.",
+      error: "Vérifie le formulaire et réessaie.",
       fieldErrors,
     };
   }
@@ -80,7 +80,7 @@ export async function createDedication(
     : sanitizeName(data.senderName || "");
 
   if (!recipientName || !message) {
-    return { ok: false, error: "Please write a dedication." };
+    return { ok: false, error: "Écris une dédicace." };
   }
 
   const liveDate = getNextShowStart(new Date(), {
@@ -113,10 +113,10 @@ export async function createDedication(
       const isCollision =
         /public_id|unique/i.test(detail);
       if (!isCollision) {
-        console.error("Dedication insert failed.");
+        console.error("Échec de l'enregistrement de la dédicace.");
         return {
           ok: false,
-          error: "Your dedication wasn't submitted. Please try again.",
+          error: "Ta dédicace n'a pas pu être envoyée. Réessaie.",
         };
       }
       publicId = generatePublicId();
@@ -125,7 +125,7 @@ export async function createDedication(
 
   return {
     ok: false,
-    error: "Your dedication wasn't submitted. Please try again.",
+    error: "Ta dédicace n'a pas pu être envoyée. Réessaie.",
   };
 }
 
@@ -191,10 +191,10 @@ export async function getPublicDedication(publicId: string) {
 
     return {
       publicId: row.publicId,
-      from: row.isAnonymous ? "Anonymous" : row.senderName || "Anonymous",
+      from: row.isAnonymous ? "Anonyme" : row.senderName || "Anonyme",
       to: row.recipientName,
       message: row.dedicationMessage,
-      status: PUBLIC_STATUS_LABEL[row.status as DedicationStatus] || "Received",
+      status: PUBLIC_STATUS_LABEL[row.status as DedicationStatus] || "Reçue",
       submittedAt: row.submittedAt.toISOString(),
     };
   } catch {
@@ -222,7 +222,7 @@ export async function getFeaturedDedication() {
 
     return {
       to: row.recipientName,
-      from: row.isAnonymous ? "Anonymous" : row.senderName || "Anonymous",
+      from: row.isAnonymous ? "Anonyme" : row.senderName || "Anonyme",
       message: row.dedicationMessage,
     };
   } catch {

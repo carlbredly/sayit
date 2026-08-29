@@ -48,7 +48,7 @@ export async function ensureOwnerExists() {
         .where(eq(admins.id, first.id));
     }
   } catch {
-    console.error("Could not ensure an owner admin exists.");
+    console.error("Impossible de garantir un compte propriétaire.");
   }
 }
 

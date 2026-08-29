@@ -4,7 +4,7 @@ import { COUNTRIES } from "@/lib/countries";
 
 const countryIso = z
   .string()
-  .refine((value) => COUNTRIES.some((c) => c.iso === value), "Choose a country.");
+  .refine((value) => COUNTRIES.some((c) => c.iso === value), "Choisis un pays.");
 
 export function dedicationFormSchema(maxLength = DEFAULT_MAX_DEDICATION_LENGTH) {
   return z
@@ -14,19 +14,19 @@ export function dedicationFormSchema(maxLength = DEFAULT_MAX_DEDICATION_LENGTH) 
       recipientName: z
         .string()
         .trim()
-        .min(1, "Tell us who it's for.")
-        .max(80, "That name is a little too long."),
+        .min(1, "Dis-nous pour qui c'est.")
+        .max(80, "Ce nom est un peu trop long."),
       countryIso: countryIso,
       whatsappNational: z
         .string()
         .trim()
-        .min(4, "Enter a WhatsApp number.")
+        .min(4, "Entre un numéro WhatsApp.")
         .max(20),
       message: z
         .string()
         .trim()
-        .min(8, "Please write a dedication.")
-        .max(maxLength, `Keep it under ${maxLength} characters.`),
+        .min(8, "Écris une dédicace.")
+        .max(maxLength, `Reste sous ${maxLength} caractères.`),
       website: z.string().optional(),
       turnstileToken: z.string().optional(),
     })
@@ -35,7 +35,7 @@ export function dedicationFormSchema(maxLength = DEFAULT_MAX_DEDICATION_LENGTH) 
         ctx.addIssue({
           code: "custom",
           path: ["senderName"],
-          message: "Add your name, or stay anonymous.",
+          message: "Ajoute ton nom, ou reste anonyme.",
         });
       }
     });
@@ -51,7 +51,7 @@ export const settingsSchema = z.object({
   showName: z.string().trim().min(1).max(80),
   tiktokUrl: z.string().trim().url().or(z.literal("")),
   paypalDonationUrl: z.string().trim().url().or(z.literal("")),
-  showTime: z.string().regex(/^\d{2}:\d{2}$/, "Use HH:MM."),
+  showTime: z.string().regex(/^\d{2}:\d{2}$/, "Utilise HH:MM."),
   timezone: z.string().min(1).max(64),
   showDurationMinutes: z.coerce.number().int().min(15).max(480),
   whatsappMessageTemplate: z.string().max(1000),
@@ -63,13 +63,13 @@ export const settingsSchema = z.object({
 
 export const createAdminUserSchema = z.object({
   name: z.string().trim().min(1).max(80),
-  email: z.string().trim().email("Enter a valid email."),
-  password: z.string().min(8, "Password must be at least 8 characters."),
+  email: z.string().trim().email("Entre un e-mail valide."),
+  password: z.string().min(8, "Le mot de passe doit faire au moins 8 caractères."),
 });
 
 export const loginSchema = z.object({
-  email: z.string().trim().email("Enter a valid email."),
-  password: z.string().min(8, "Password must be at least 8 characters."),
+  email: z.string().trim().email("Entre un e-mail valide."),
+  password: z.string().min(8, "Le mot de passe doit faire au moins 8 caractères."),
 });
 
 export const adminDedicationEditSchema = z.object({
@@ -78,7 +78,7 @@ export const adminDedicationEditSchema = z.object({
   recipientName: z
     .string()
     .trim()
-    .min(1, "Tell us who it's for.")
+    .min(1, "Dis-nous pour qui c'est.")
     .max(80),
   recipientWhatsapp: z.string().trim().min(8).max(32),
   dedicationMessage: z.string().trim().min(8).max(4000),

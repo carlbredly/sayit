@@ -7,7 +7,7 @@ import { FAQ_ITEMS } from "@/lib/faq";
 
 export const metadata: Metadata = {
   title: "FAQ",
-  description: "Answers about dedications, privacy, the live show, and donations.",
+  description: "Réponses sur les dédicaces, la confidentialité, le live et les dons.",
   alternates: { canonical: "/faq" },
 };
 
@@ -20,7 +20,7 @@ export default async function FaqPage() {
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12 sm:px-6">
         <h1 className="font-display text-4xl font-semibold tracking-tight">FAQ</h1>
         <p className="mt-3 text-muted-foreground">
-          Short answers. If you still have a question, watch the live and ask there.
+          Réponses courtes. Si tu as encore une question, viens au live et pose-la là.
         </p>
         <Accordion className="mt-10">
           {FAQ_ITEMS.map((item) => (

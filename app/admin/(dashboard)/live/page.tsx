@@ -13,13 +13,13 @@ export default async function LiveQueuePage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="font-display text-2xl font-semibold">Live Queue</h1>
+          <h1 className="font-display text-2xl font-semibold">File live</h1>
           <p className="text-sm text-muted-foreground">
-            Drag to set the order. Open host mode when you go live.
+            Glisse pour définir l&apos;ordre. Ouvre le mode hôte au moment du live.
           </p>
         </div>
         <Link href="/admin/live/mode" className={cn(buttonVariants(), "h-11 px-5")}>
-          Open Live Mode
+          Ouvrir le mode live
         </Link>
       </div>
       <LiveQueueList
