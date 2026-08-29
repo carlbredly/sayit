@@ -53,6 +53,8 @@ CREATE TABLE "admins" (
   "email" varchar(255) NOT NULL UNIQUE,
   "password_hash" varchar(255) NOT NULL,
   "name" varchar(80),
+  "is_owner" boolean NOT NULL DEFAULT false,
+  "is_active" boolean NOT NULL DEFAULT true,
   "created_at" timestamptz NOT NULL DEFAULT now()
 );
 

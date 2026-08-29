@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { Heart } from "lucide-react";
+import { TrackedExternalLink } from "@/components/analytics/tracked-link";
+import { toWhatsAppDigits } from "@/lib/whatsapp";
 
 export function SiteFooter({
   showName,
@@ -8,6 +10,11 @@ export function SiteFooter({
   showName: string;
   tiktokUrl: string;
 }) {
+  const publicWhatsApp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(/[^\d+]/g, "");
+  const waHref = publicWhatsApp
+    ? `https://wa.me/${toWhatsAppDigits(publicWhatsApp)}`
+    : null;
+
   return (
     <footer className="border-t border-border/80 bg-background">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-10 sm:px-6 md:flex-row md:items-center md:justify-between">
@@ -27,9 +34,18 @@ export function SiteFooter({
           <Link href="/faq" className="hover:text-foreground">
             FAQ
           </Link>
-          <a href={tiktokUrl} target="_blank" rel="noreferrer" className="hover:text-foreground">
+          <TrackedExternalLink
+            href={tiktokUrl}
+            event="tiktok_cta_clicked"
+            className="hover:text-foreground"
+          >
             TikTok
-          </a>
+          </TrackedExternalLink>
+          {waHref ? (
+            <a href={waHref} target="_blank" rel="noreferrer" className="hover:text-foreground">
+              WhatsApp
+            </a>
+          ) : null}
           <Link href="/privacy" className="hover:text-foreground">
             Privacy
           </Link>

@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import type { AppSettings } from "@/lib/settings";
-import { updateSettingsAction } from "@/app/actions/admin";
+import { updateSettingsAction, archiveExpiredDedications } from "@/app/actions/admin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -95,11 +95,14 @@ export function SettingsForm({ initial }: { initial: AppSettings }) {
         <Label htmlFor="wa">WhatsApp message template</Label>
         <Textarea
           id="wa"
-          className="min-h-28"
+          className="min-h-36 whitespace-pre-wrap"
           value={form.whatsappMessageTemplate}
           onChange={(e) => update("whatsappMessageTemplate", e.target.value)}
         />
-        <p className="text-xs text-muted-foreground">Use {"{showName}"} to insert the show name.</p>
+        <p className="text-xs text-muted-foreground">
+          Pre-filled when you click Contact on WhatsApp. Use {"{showName}"} for the
+          show name. Leave empty to open WhatsApp without a message.
+        </p>
       </div>
       <div className="space-y-2">
         <Label htmlFor="donation">Donation message</Label>
@@ -119,6 +122,23 @@ export function SettingsForm({ initial }: { initial: AppSettings }) {
           value={form.retentionDays}
           onChange={(e) => update("retentionDays", Number(e.target.value))}
         />
+        <p className="text-xs text-muted-foreground">
+          Completed, read-live, and rejected dedications older than this are archived.
+        </p>
+        <Button
+          type="button"
+          variant="outline"
+          disabled={pending}
+          onClick={() =>
+            start(async () => {
+              const result = await archiveExpiredDedications();
+              if (result.ok) toast.success(`Archived ${result.archived} dedication(s).`);
+              else toast.error(result.error);
+            })
+          }
+        >
+          Archive expired dedications
+        </Button>
       </div>
       <Button type="submit" className="h-11" disabled={pending}>
         {pending ? "Saving..." : "Save settings"}

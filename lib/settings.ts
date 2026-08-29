@@ -65,7 +65,7 @@ export async function getSettings(): Promise<AppSettings> {
       timezone: row.timezone || fallback.timezone,
       showDurationMinutes: row.showDurationMinutes || fallback.showDurationMinutes,
       whatsappMessageTemplate:
-        row.whatsappMessageTemplate || fallback.whatsappMessageTemplate,
+        row.whatsappMessageTemplate ?? fallback.whatsappMessageTemplate,
       maxDedicationLength: row.maxDedicationLength || fallback.maxDedicationLength,
       donationMessage: row.donationMessage || fallback.donationMessage,
       retentionDays: row.retentionDays || fallback.retentionDays,

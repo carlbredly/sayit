@@ -6,7 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export function LoginForm() {
+export function LoginForm({
+  expired = false,
+  disabled = false,
+}: {
+  expired?: boolean;
+  disabled?: boolean;
+}) {
   const [state, formAction, pending] = useActionState(loginAction, { error: null });
 
   return (
@@ -33,6 +39,14 @@ export function LoginForm() {
           className="h-12"
         />
       </div>
+      {disabled ? (
+        <p className="text-sm text-destructive">
+          Your access has been turned off. Contact the owner.
+        </p>
+      ) : null}
+      {expired ? (
+        <p className="text-sm text-destructive">Your session has expired. Please sign in again.</p>
+      ) : null}
       {state?.error ? <p className="text-sm text-destructive">{state.error}</p> : null}
       <Button type="submit" className="h-12 w-full" disabled={pending}>
         {pending ? "Signing in..." : "Sign In"}

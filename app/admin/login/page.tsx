@@ -3,16 +3,25 @@ import { redirect } from "next/navigation";
 import { LoginForm } from "@/components/admin/login-form";
 import { auth } from "@/auth";
 import { getSettings } from "@/lib/settings";
+import { getAdminById } from "@/lib/admin-guard";
 
 export const metadata = {
   title: "Admin login",
   robots: { index: false, follow: false },
 };
 
-export default async function AdminLoginPage() {
+export default async function AdminLoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ expired?: string; disabled?: string }>;
+}) {
   const session = await auth();
-  if (session?.user) redirect("/admin");
+  if (session?.user?.id) {
+    const me = await getAdminById(session.user.id);
+    if (me?.isActive) redirect("/admin");
+  }
   const settings = await getSettings();
+  const { expired, disabled } = await searchParams;
 
   return (
     <div className="flex min-h-full flex-1 items-center justify-center px-4">
@@ -22,7 +31,7 @@ export default async function AdminLoginPage() {
           <h1 className="mt-4 font-display text-2xl font-semibold">Welcome back</h1>
           <p className="mt-1 text-sm text-muted-foreground">{settings.showName} host login</p>
         </div>
-        <LoginForm />
+        <LoginForm expired={expired === "1"} disabled={disabled === "1"} />
       </div>
     </div>
   );

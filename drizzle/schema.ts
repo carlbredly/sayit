@@ -76,6 +76,8 @@ export const admins = pgTable("admins", {
   email: varchar("email", { length: 255 }).notNull().unique(),
   passwordHash: varchar("password_hash", { length: 255 }).notNull(),
   name: varchar("name", { length: 80 }),
+  isOwner: boolean("is_owner").notNull().default(false),
+  isActive: boolean("is_active").notNull().default(true),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),

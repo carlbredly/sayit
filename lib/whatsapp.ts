@@ -14,12 +14,22 @@ export function validateWhatsApp(countryDial: string, nationalNumber: string) {
   return { ok: true as const, e164: parsed.number };
 }
 
-export function toWhatsAppLink(e164: string, message: string) {
-  const digits = e164.replace(/[^\d]/g, "");
-  const text = encodeURIComponent(message);
-  return `https://wa.me/${digits}?text=${text}`;
+export function toWhatsAppDigits(e164: string) {
+  return e164.replace(/[^\d]/g, "");
 }
 
-export function fillWhatsAppTemplate(template: string, showName: string) {
-  return template.replaceAll("{showName}", showName);
+export function toWhatsAppLink(e164: string, message?: string) {
+  const digits = toWhatsAppDigits(e164);
+  const base = `https://wa.me/${digits}`;
+  if (!message?.trim()) return base;
+  return `${base}?text=${encodeURIComponent(message)}`;
+}
+
+export function fillWhatsAppTemplate(
+  template: string,
+  values: { showName: string; showTime?: string }
+) {
+  return template
+    .replaceAll("{showName}", values.showName)
+    .replaceAll("{showTime}", values.showTime || "10:00 AM New York time");
 }

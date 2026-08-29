@@ -17,7 +17,7 @@ export function DedicationFilters() {
 
   return (
     <form
-      className="grid gap-3 md:grid-cols-5"
+      className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6"
       onSubmit={(event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -60,6 +60,13 @@ export function DedicationFilters() {
         onChange={(e) => update("from", e.target.value)}
         className="h-10"
         aria-label="From date"
+      />
+      <Input
+        type="date"
+        defaultValue={params.get("to") || ""}
+        onChange={(e) => update("to", e.target.value)}
+        className="h-10"
+        aria-label="To date"
       />
       <Input
         type="date"

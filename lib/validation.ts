@@ -54,16 +54,34 @@ export const settingsSchema = z.object({
   showTime: z.string().regex(/^\d{2}:\d{2}$/, "Use HH:MM."),
   timezone: z.string().min(1).max(64),
   showDurationMinutes: z.coerce.number().int().min(15).max(480),
-  whatsappMessageTemplate: z.string().trim().min(10).max(1000),
+  whatsappMessageTemplate: z.string().max(1000),
   maxDedicationLength: z.coerce.number().int().min(80).max(4000),
   donationMessage: z.string().trim().max(500).optional().or(z.literal("")),
   retentionDays: z.coerce.number().int().min(7).max(3650),
   showStatusOverride: z.enum(["auto", "live", "off"]),
 });
 
+export const createAdminUserSchema = z.object({
+  name: z.string().trim().min(1).max(80),
+  email: z.string().trim().email("Enter a valid email."),
+  password: z.string().min(8, "Password must be at least 8 characters."),
+});
+
 export const loginSchema = z.object({
   email: z.string().trim().email("Enter a valid email."),
   password: z.string().min(8, "Password must be at least 8 characters."),
+});
+
+export const adminDedicationEditSchema = z.object({
+  senderName: z.string().trim().max(80).optional().or(z.literal("")),
+  isAnonymous: z.boolean(),
+  recipientName: z
+    .string()
+    .trim()
+    .min(1, "Tell us who it's for.")
+    .max(80),
+  recipientWhatsapp: z.string().trim().min(8).max(32),
+  dedicationMessage: z.string().trim().min(8).max(4000),
 });
 
 export const donationUpdateSchema = z.object({

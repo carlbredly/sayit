@@ -1,10 +1,11 @@
 "use server";
 
 import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
 import { and, eq } from "drizzle-orm";
 import { dedications } from "@/drizzle/schema";
 import { getDb, isDatabaseConfigured } from "@/lib/db";
-import { generatePublicId } from "@/lib/public-id";
+import { generatePublicId, isValidPublicId } from "@/lib/public-id";
 import { getSettings } from "@/lib/settings";
 import { sanitizeName, sanitizeText, isHoneypotFilled } from "@/lib/sanitize";
 import { dedicationFormSchema } from "@/lib/validation";
@@ -101,7 +102,7 @@ export async function createDedication(
         recipientWhatsapp: phone.e164,
         dedicationMessage: message,
         status: "NEW",
-        donationStatus: "OFFERED",
+        donationStatus: "NOT_OFFERED",
         liveDate,
         submitterIpHash: hashIp(ip),
       });
@@ -118,34 +119,77 @@ export async function createDedication(
   };
 }
 
-export async function getPublicDedication(publicId: string) {
-  if (!isDatabaseConfigured()) return null;
+export async function recordDonationIntent(
+  publicId: string,
+  intent: "OFFERED" | "PENDING"
+) {
+  if (!isDatabaseConfigured() || !isValidPublicId(publicId)) {
+    return { ok: false as const };
+  }
 
   const db = getDb();
   const [row] = await db
     .select({
-      publicId: dedications.publicId,
-      senderName: dedications.senderName,
-      isAnonymous: dedications.isAnonymous,
-      recipientName: dedications.recipientName,
-      dedicationMessage: dedications.dedicationMessage,
-      status: dedications.status,
-      submittedAt: dedications.submittedAt,
+      id: dedications.id,
+      donationStatus: dedications.donationStatus,
     })
     .from(dedications)
-    .where(and(eq(dedications.publicId, publicId.toUpperCase())))
+    .where(eq(dedications.publicId, publicId.toUpperCase()))
     .limit(1);
 
-  if (!row) return null;
+  if (!row) return { ok: false as const };
 
-  return {
-    publicId: row.publicId,
-    from: row.isAnonymous ? "Anonymous" : row.senderName || "Anonymous",
-    to: row.recipientName,
-    message: row.dedicationMessage,
-    status: PUBLIC_STATUS_LABEL[row.status as DedicationStatus] || "Received",
-    submittedAt: row.submittedAt.toISOString(),
-  };
+  if (row.donationStatus === "COMPLETED" || row.donationStatus === "FAILED") {
+    return { ok: true as const };
+  }
+
+  await db
+    .update(dedications)
+    .set({
+      donationStatus: intent,
+      updatedAt: new Date(),
+    })
+    .where(eq(dedications.id, row.id));
+
+  revalidatePath("/admin/donations");
+  revalidatePath("/admin");
+
+  return { ok: true as const };
+}
+
+export async function getPublicDedication(publicId: string) {
+  if (!isDatabaseConfigured()) return null;
+  if (!isValidPublicId(publicId)) return null;
+
+  try {
+    const db = getDb();
+    const [row] = await db
+      .select({
+        publicId: dedications.publicId,
+        senderName: dedications.senderName,
+        isAnonymous: dedications.isAnonymous,
+        recipientName: dedications.recipientName,
+        dedicationMessage: dedications.dedicationMessage,
+        status: dedications.status,
+        submittedAt: dedications.submittedAt,
+      })
+      .from(dedications)
+      .where(and(eq(dedications.publicId, publicId.toUpperCase())))
+      .limit(1);
+
+    if (!row) return null;
+
+    return {
+      publicId: row.publicId,
+      from: row.isAnonymous ? "Anonymous" : row.senderName || "Anonymous",
+      to: row.recipientName,
+      message: row.dedicationMessage,
+      status: PUBLIC_STATUS_LABEL[row.status as DedicationStatus] || "Received",
+      submittedAt: row.submittedAt.toISOString(),
+    };
+  } catch {
+    return null;
+  }
 }
 
 export async function getFeaturedDedication() {

@@ -5,19 +5,26 @@ import { and, asc, desc, eq, ilike, or, sql } from "drizzle-orm";
 import { auth } from "@/auth";
 import { dedications, settings } from "@/drizzle/schema";
 import { getDb } from "@/lib/db";
+import { getAdminById } from "@/lib/admin-guard";
 import {
   DEDICATION_STATUSES,
   DONATION_STATUSES,
   type DedicationStatus,
   type DonationStatus,
 } from "@/lib/constants";
-import { sanitizeText } from "@/lib/sanitize";
-import { settingsSchema } from "@/lib/validation";
+import { sanitizeName, sanitizeText } from "@/lib/sanitize";
+import { adminDedicationEditSchema, settingsSchema } from "@/lib/validation";
 import { getSettings } from "@/lib/settings";
+import { runRetentionPolicy } from "@/lib/retention";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 async function requireAdmin() {
   const session = await auth();
   if (!session?.user?.id) {
+    throw new Error("Unauthorized");
+  }
+  const admin = await getAdminById(session.user.id);
+  if (!admin || !admin.isActive) {
     throw new Error("Unauthorized");
   }
   return session;
@@ -182,6 +189,15 @@ export async function rejectDedication(id: string) {
   return updateDedicationStatus(id, "REJECTED");
 }
 
+export async function archiveDedication(id: string) {
+  return updateDedicationStatus(id, "ARCHIVED");
+}
+
+export async function archiveExpiredDedications() {
+  await requireAdmin();
+  return runRetentionPolicy();
+}
+
 export async function updateAdminNotes(id: string, notes: string) {
   await requireAdmin();
   const db = getDb();
@@ -197,25 +213,46 @@ export async function updateAdminNotes(id: string, notes: string) {
 
 export async function updateDedicationFields(
   id: string,
-  fields: {
-    senderName?: string;
-    isAnonymous?: boolean;
-    recipientName?: string;
-    recipientWhatsapp?: string;
-    dedicationMessage?: string;
-  }
+  fields: unknown
 ) {
   await requireAdmin();
+  const parsed = adminDedicationEditSchema.safeParse(fields);
+  if (!parsed.success) {
+    return { ok: false as const, error: "Please check the dedication details." };
+  }
+
+  const raw = parsed.data.recipientWhatsapp.startsWith("+")
+    ? parsed.data.recipientWhatsapp
+    : `+${parsed.data.recipientWhatsapp.replace(/[^\d]/g, "")}`;
+  const phone = parsePhoneNumberFromString(raw);
+  if (!phone?.isValid()) {
+    return { ok: false as const, error: "Invalid WhatsApp number." };
+  }
+
+  const recipientName = sanitizeName(parsed.data.recipientName);
+  const message = sanitizeText(parsed.data.dedicationMessage, 4000);
+  if (!recipientName || !message) {
+    return { ok: false as const, error: "Recipient and message are required." };
+  }
+
   const db = getDb();
   await db
     .update(dedications)
     .set({
-      ...fields,
+      isAnonymous: parsed.data.isAnonymous,
+      senderName: parsed.data.isAnonymous
+        ? null
+        : sanitizeName(parsed.data.senderName || "") || null,
+      recipientName,
+      recipientWhatsapp: phone.number,
+      dedicationMessage: message,
       updatedAt: new Date(),
     })
     .where(eq(dedications.id, id));
   revalidatePath("/admin/dedications");
   revalidatePath(`/admin/dedications/${id}`);
+  revalidatePath("/admin/live");
+  return { ok: true as const };
 }
 
 export async function deleteDedication(id: string) {

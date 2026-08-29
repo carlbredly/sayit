@@ -9,6 +9,7 @@ import {
   ListOrdered,
   LogOut,
   Settings,
+  Users,
   Wallet,
 } from "lucide-react";
 import { logoutAction } from "@/app/actions/auth";
@@ -21,11 +22,19 @@ const NAV = [
   { href: "/admin/live", label: "Live Queue", icon: ListOrdered },
   { href: "/admin/live/mode", label: "Live Mode", icon: Clapperboard },
   { href: "/admin/donations", label: "Donations", icon: Wallet },
+  { href: "/admin/users", label: "Users", icon: Users, ownerOnly: true },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 
-export function AdminSidebar({ showName }: { showName: string }) {
+export function AdminSidebar({
+  showName,
+  isOwner = false,
+}: {
+  showName: string;
+  isOwner?: boolean;
+}) {
   const pathname = usePathname();
+  const items = NAV.filter((item) => !item.ownerOnly || isOwner);
 
   return (
     <aside className="hidden w-64 shrink-0 border-r border-border bg-sidebar lg:flex lg:flex-col">
@@ -34,7 +43,7 @@ export function AdminSidebar({ showName }: { showName: string }) {
         {showName}
       </div>
       <nav className="flex flex-1 flex-col gap-1 p-3">
-        {NAV.map((item) => {
+        {items.map((item) => {
           const active =
             item.href === "/admin"
               ? pathname === "/admin"
@@ -66,8 +75,15 @@ export function AdminSidebar({ showName }: { showName: string }) {
   );
 }
 
-export function AdminMobileNav({ showName }: { showName: string }) {
+export function AdminMobileNav({
+  showName,
+  isOwner = false,
+}: {
+  showName: string;
+  isOwner?: boolean;
+}) {
   const pathname = usePathname();
+  const items = NAV.filter((item) => !item.ownerOnly || isOwner);
 
   return (
     <div className="border-b border-border lg:hidden">
@@ -80,7 +96,7 @@ export function AdminMobileNav({ showName }: { showName: string }) {
         </form>
       </div>
       <nav className="flex gap-1 overflow-x-auto px-2 pb-2">
-        {NAV.map((item) => {
+        {items.map((item) => {
           const active =
             item.href === "/admin"
               ? pathname === "/admin"

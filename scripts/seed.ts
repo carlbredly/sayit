@@ -1,4 +1,7 @@
-import "dotenv/config";
+import { config } from "dotenv";
+
+config({ path: ".env" });
+config({ path: ".env.local", override: true });
 import bcrypt from "bcryptjs";
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
@@ -35,7 +38,7 @@ async function seed() {
   if (existing) {
     await db
       .update(admins)
-      .set({ passwordHash, name: "Host" })
+      .set({ passwordHash, name: "Host", isOwner: true, isActive: true })
       .where(eq(admins.email, email));
     console.log(`Updated admin password for ${email}`);
   } else {
@@ -43,6 +46,8 @@ async function seed() {
       email,
       passwordHash,
       name: "Host",
+      isOwner: true,
+      isActive: true,
     });
     console.log(`Created admin ${email}`);
   }

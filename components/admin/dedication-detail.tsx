@@ -10,7 +10,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { formatDateTime } from "@/lib/timezone";
-import { toWhatsAppLink, fillWhatsAppTemplate } from "@/lib/whatsapp";
+import { fillWhatsAppTemplate } from "@/lib/whatsapp";
+import { WhatsAppContactButton } from "@/components/admin/whatsapp-contact-button";
+import { DedicationEditForm } from "@/components/admin/dedication-edit-form";
 import {
   completeDedication,
   deleteDedication,
@@ -37,8 +39,7 @@ export function DedicationDetail({
   const [amount, setAmount] = useState(dedication.donationAmount || "");
   const [pending, start] = useTransition();
 
-  const message = fillWhatsAppTemplate(whatsappTemplate, showName);
-  const wa = toWhatsAppLink(dedication.recipientWhatsapp, message);
+  const message = fillWhatsAppTemplate(whatsappTemplate, { showName });
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
@@ -81,9 +82,14 @@ export function DedicationDetail({
         <div className="rounded-3xl border border-border bg-card p-5">
           <h2 className="font-medium">Actions</h2>
           <div className="mt-4 flex flex-col gap-2">
-            <a href={wa} target="_blank" rel="noreferrer">
-              <Button className="h-11 w-full">Contact on WhatsApp</Button>
-            </a>
+            <WhatsAppContactButton
+              dedicationId={dedication.id}
+              phone={dedication.recipientWhatsapp}
+              message={message}
+              alreadyContacted={
+                dedication.status === "CONTACTED" || Boolean(dedication.contactedAt)
+              }
+            />
             <Button variant="outline" disabled={pending} onClick={() => start(() => markContacted(dedication.id))}>
               Mark Contacted
             </Button>
@@ -115,6 +121,8 @@ export function DedicationDetail({
             </Button>
           </div>
         </div>
+
+        <DedicationEditForm dedication={dedication} />
 
         <div className="rounded-3xl border border-border bg-card p-5">
           <h2 className="font-medium">Internal notes</h2>

@@ -37,6 +37,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           .limit(1);
 
         if (!admin) return null;
+        if (!admin.isActive) return null;
 
         const valid = await bcrypt.compare(parsed.data.password, admin.passwordHash);
         if (!valid) return null;

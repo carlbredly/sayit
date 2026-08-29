@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 import { PageViewTracker } from "@/components/analytics/page-view-tracker";
 import { FloatingHeartsBackground } from "@/components/home/floating-hearts";
+import { PageTransition } from "@/components/page-transition";
 import "./globals.css";
 
 const inter = Inter({
@@ -75,7 +76,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <PageViewTracker />
             <FloatingHeartsBackground />
           </Suspense>
-          <div className="relative z-10 flex min-h-full flex-1 flex-col">{children}</div>
+          <div className="relative z-10 flex min-h-full flex-1 flex-col">
+            <PageTransition>{children}</PageTransition>
+          </div>
           <Toaster position="top-center" />
         </TooltipProvider>
       </body>

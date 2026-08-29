@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Check, Copy, Heart } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { recordDonationIntent } from "@/app/actions/dedications";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
@@ -18,8 +19,14 @@ export function SuccessExperience({
   donationMessage: string;
   tiktokUrl: string;
 }) {
-  const [phase, setPhase] = useState<"success" | "donate" | "done">("success");
+  const [phase, setPhase] = useState<"success" | "done">("success");
   const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (publicId.startsWith("DED-") && publicId !== "DED-XXXXX") {
+      void recordDonationIntent(publicId, "OFFERED");
+    }
+  }, [publicId]);
 
   async function copyId() {
     await navigator.clipboard.writeText(publicId);
@@ -55,43 +62,6 @@ export function SuccessExperience({
     );
   }
 
-  if (phase === "donate") {
-    return (
-      <div className="mx-auto max-w-lg px-4 py-16 text-center">
-        <h1 className="font-display text-4xl font-semibold tracking-tight">
-          Want to support the show? ❤️
-        </h1>
-        <p className="mt-4 text-muted-foreground">{donationMessage}</p>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Completely optional. Your dedication is already saved.
-        </p>
-        <div className="mt-8 flex flex-col gap-3">
-          {paypalUrl ? (
-            <a
-              href={paypalUrl}
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => {
-                track("donation_cta_clicked");
-                setPhase("done");
-              }}
-              className="inline-flex h-12 items-center justify-center rounded-lg bg-[#6D1ED4] px-6 font-semibold text-white"
-            >
-              Support the Show with Zelle
-            </a>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              Donations aren&apos;t configured yet.
-            </p>
-          )}
-          <Button variant="ghost" className="h-12" onClick={() => setPhase("done")}>
-            Maybe later
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="mx-auto max-w-lg px-4 py-16 text-center">
       <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-primary/15 text-primary glow-pink">
@@ -115,10 +85,47 @@ export function SuccessExperience({
           </Button>
         </div>
         <p className="mt-2 text-sm text-muted-foreground">Save this ID for your records.</p>
+        {publicId !== "DED-XXXXX" ? (
+          <Link
+            href={`/dedication/${publicId}`}
+            className="mt-3 inline-block text-sm text-primary hover:underline"
+          >
+            View confirmation
+          </Link>
+        ) : null}
       </div>
-      <Button className="mt-8 h-12 w-full sm:w-auto sm:px-8" onClick={() => setPhase("donate")}>
-        Continue
-      </Button>
+
+      <div className="mt-10 rounded-[2rem] border border-primary/20 bg-primary/10 px-6 py-8">
+        <h2 className="font-display text-2xl font-semibold tracking-tight">
+          Want to support the show? ❤️
+        </h2>
+        <p className="mt-3 text-muted-foreground">{donationMessage}</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Completely optional. Your dedication is already saved.
+        </p>
+        <div className="mt-6 flex flex-col gap-3">
+          {paypalUrl ? (
+            <a
+              href={paypalUrl}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => {
+                track("donation_cta_clicked");
+                void recordDonationIntent(publicId, "PENDING");
+                setPhase("done");
+              }}
+              className="inline-flex h-12 items-center justify-center rounded-lg bg-[#6D1ED4] px-6 font-semibold text-white"
+            >
+              Support the Show
+            </a>
+          ) : (
+            <p className="text-sm text-muted-foreground">Donations aren&apos;t configured yet.</p>
+          )}
+          <Button variant="ghost" className="h-12" onClick={() => setPhase("done")}>
+            Maybe later
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

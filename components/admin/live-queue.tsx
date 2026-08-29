@@ -16,19 +16,20 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripVertical, MessageCircle } from "lucide-react";
+import { GripVertical } from "lucide-react";
 import type { SerializedDedication } from "@/lib/serialize";
 import { reorderLiveQueue } from "@/app/actions/admin";
 import { StatusBadge } from "@/components/admin/status-badge";
-import { toWhatsAppLink, fillWhatsAppTemplate } from "@/lib/whatsapp";
+import { fillWhatsAppTemplate } from "@/lib/whatsapp";
+import { WhatsAppContactButton } from "@/components/admin/whatsapp-contact-button";
 import type { DedicationStatus } from "@/lib/constants";
 
 function SortableRow({
   item,
-  wa,
+  message,
 }: {
   item: SerializedDedication;
-  wa: string;
+  message: string;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
     id: item.id,
@@ -62,15 +63,13 @@ function SortableRow({
           <p className="mt-2 text-xs text-amber-300">Note: {item.adminNotes}</p>
         ) : null}
       </div>
-      <a
-        href={wa}
-        target="_blank"
-        rel="noreferrer"
-        className="rounded-lg border border-border p-2 text-success"
-        aria-label="Open WhatsApp"
-      >
-        <MessageCircle className="size-4" />
-      </a>
+      <WhatsAppContactButton
+        compact
+        dedicationId={item.id}
+        phone={item.recipientWhatsapp}
+        message={message}
+        alreadyContacted={item.status === "CONTACTED" || Boolean(item.contactedAt)}
+      />
     </li>
   );
 }
@@ -117,10 +116,7 @@ export function LiveQueueList({
               <div className="flex-1">
                 <SortableRow
                   item={item}
-                  wa={toWhatsAppLink(
-                    item.recipientWhatsapp,
-                    fillWhatsAppTemplate(whatsappTemplate, showName)
-                  )}
+                  message={fillWhatsAppTemplate(whatsappTemplate, { showName })}
                 />
               </div>
             </div>

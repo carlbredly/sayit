@@ -4,7 +4,8 @@ import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import type { SerializedDedication } from "@/lib/serialize";
 import { completeDedication, markReadLive } from "@/app/actions/admin";
-import { fillWhatsAppTemplate, toWhatsAppLink } from "@/lib/whatsapp";
+import { fillWhatsAppTemplate } from "@/lib/whatsapp";
+import { WhatsAppContactButton } from "@/components/admin/whatsapp-contact-button";
 
 export function HostMode({
   items,
@@ -27,10 +28,7 @@ export function HostMode({
     );
   }
 
-  const wa = toWhatsAppLink(
-    current.recipientWhatsapp,
-    fillWhatsAppTemplate(whatsappTemplate, showName)
-  );
+  const message = fillWhatsAppTemplate(whatsappTemplate, { showName });
 
   return (
     <div className="mx-auto flex min-h-[80vh] max-w-4xl flex-col justify-center px-4 py-8">
@@ -61,9 +59,18 @@ export function HostMode({
         >
           Previous
         </Button>
-        <a href={wa} target="_blank" rel="noreferrer" className="flex-1">
-          <Button className="h-14 w-full">Contact</Button>
-        </a>
+        <div className="flex-1">
+          <WhatsAppContactButton
+            dedicationId={current.id}
+            phone={current.recipientWhatsapp}
+            message={message}
+            label="Contact on WhatsApp"
+            className="h-14"
+            alreadyContacted={
+              current.status === "CONTACTED" || Boolean(current.contactedAt)
+            }
+          />
+        </div>
         <Button
           variant="outline"
           className="h-14 flex-1"

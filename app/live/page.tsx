@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { TrackedExternalLink } from "@/components/analytics/tracked-link";
+import { HowItWorks } from "@/components/home/how-it-works";
 import { Countdown } from "@/components/live/countdown";
 import { DedicationCard } from "@/components/dedication/dedication-card";
 import { buttonVariants } from "@/components/ui/button";
@@ -37,14 +39,13 @@ export default async function LivePage() {
               <p className="text-sm text-muted-foreground">TikTok Live</p>
             </div>
           </div>
-          <a
+          <TrackedExternalLink
             href={settings.tiktokUrl}
-            target="_blank"
-            rel="noreferrer"
+            event="tiktok_cta_clicked"
             className={cn(buttonVariants(), "mt-8 h-12 px-8")}
           >
             Watch Us Live on TikTok
-          </a>
+          </TrackedExternalLink>
           <div className="mx-auto mt-12 flex justify-center">
             <Countdown
               timezone={settings.timezone}
@@ -80,6 +81,7 @@ export default async function LivePage() {
             />
           )}
         </section>
+        <HowItWorks />
       </main>
       <SiteFooter showName={settings.showName} tiktokUrl={settings.tiktokUrl} />
     </div>

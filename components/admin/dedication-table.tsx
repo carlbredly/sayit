@@ -72,6 +72,12 @@ export function DedicationTable({ rows }: { rows: SerializedDedication[] }) {
                   >
                     View
                   </Link>
+                  <Link
+                    href={`/admin/dedications/${row.id}`}
+                    className={cn(buttonVariants({ variant: "outline", size: "xs" }))}
+                  >
+                    Edit
+                  </Link>
                   <Button
                     size="xs"
                     variant="outline"
@@ -111,6 +117,14 @@ export function DedicationTable({ rows }: { rows: SerializedDedication[] }) {
                     onClick={() => start(() => rejectDedication(row.id))}
                   >
                     Reject
+                  </Button>
+                  <Button
+                    size="xs"
+                    variant="outline"
+                    disabled={pending}
+                    onClick={() => start(() => updateDedicationStatus(row.id, "ARCHIVED"))}
+                  >
+                    Archive
                   </Button>
                 </div>
               </td>

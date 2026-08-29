@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
-import { Countdown } from "@/components/live/countdown";
+import { Countdown, ShowStatusBadge } from "@/components/live/countdown";
 import { FadeIn } from "@/components/motion";
 import { HowItWorks } from "@/components/home/how-it-works";
 import { PrimaryCta } from "@/components/home/primary-cta";
 import { DedicationCard } from "@/components/dedication/dedication-card";
+import { TrackedExternalLink } from "@/components/analytics/tracked-link";
 import { buttonVariants } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { getSettings } from "@/lib/settings";
@@ -77,16 +78,41 @@ export default async function HomePage() {
           </FadeIn>
         </section>
 
+        <section id="schedule" className="px-4 py-16 sm:px-6">
+          <FadeIn className="mx-auto max-w-3xl text-center">
+            <ShowStatusBadge
+              timezone={settings.timezone}
+              showTime={settings.showTime}
+              durationMinutes={settings.showDurationMinutes}
+              override={settings.showStatusOverride}
+            />
+            <h2 className="mt-4 font-display text-3xl font-semibold">Live schedule</h2>
+            <p className="mt-3 text-muted-foreground">
+              Every Saturday · {timeLabel}
+            </p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              We go live on TikTok. Send a dedication before the show — we might surprise
+              someone you love.
+            </p>
+          </FadeIn>
+        </section>
+
         <section className="px-4 py-16 sm:px-6">
-          <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-2">
-            <div>
-              <h2 className="font-display text-3xl font-semibold">Why send a dedication</h2>
-              <ul className="mt-6 space-y-4 text-muted-foreground">
-                <li>Because some words feel bigger when they&apos;re said out loud.</li>
-                <li>Because a surprise on live hits differently than a private text.</li>
-                <li>Because you can stay anonymous — or let them know it was you.</li>
-              </ul>
-            </div>
+          <div className="mx-auto max-w-3xl">
+            <h2 className="font-display text-3xl font-semibold">Why send a dedication</h2>
+            <ul className="mt-6 space-y-4 text-muted-foreground">
+              <li>Because some words feel bigger when they&apos;re said out loud.</li>
+              <li>Because a surprise on live hits differently than a private text.</li>
+              <li>Because you can stay anonymous — or let them know it was you.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section className="px-4 py-8 sm:px-6">
+          <div className="mx-auto max-w-xl">
+            <h2 className="mb-6 text-center font-display text-3xl font-semibold">
+              Example dedication
+            </h2>
             <DedicationCard
               from={featured?.from || "Anonymous"}
               to={featured?.to || "Sarah"}
@@ -104,9 +130,13 @@ export default async function HomePage() {
             <p className="mt-3 text-muted-foreground">
               Every Saturday · {timeLabel}
             </p>
-            <Link href="/live" className={cn(buttonVariants(), "mt-6 h-12 px-8")}>
-              Watch Us Live
-            </Link>
+            <TrackedExternalLink
+              href={settings.tiktokUrl}
+              event="tiktok_cta_clicked"
+              className={cn(buttonVariants(), "mt-6 h-12 px-8")}
+            >
+              Watch Us Live on TikTok
+            </TrackedExternalLink>
           </div>
         </section>
 

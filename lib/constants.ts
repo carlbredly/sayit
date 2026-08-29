@@ -48,8 +48,11 @@ export const DEFAULT_SHOW_DURATION_MINUTES = 90;
 export const DEFAULT_MAX_DEDICATION_LENGTH = 1000;
 export const DEFAULT_RETENTION_DAYS = 90;
 
-export const DEFAULT_WHATSAPP_TEMPLATE =
-  "Hi! This is {showName}. We're reaching out because someone has a special dedication for you that we'd love to share with you during our TikTok Live. ❤️";
+export const DEFAULT_WHATSAPP_TEMPLATE = `Hi! ❤️ This is {showName}.
+
+Someone has sent you a special dedication and we'd love to surprise you during our TikTok Live.
+
+We'll be going live Saturday at 10:00 AM New York time.`;
 
 export const DEFAULT_DONATION_MESSAGE =
   "If you enjoyed sending this special message, you can support the show with an optional donation.";

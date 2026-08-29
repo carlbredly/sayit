@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { getNextShowStart, getShowEnd, resolveShowPhase } from "@/lib/timezone";
+import { getNextShowStart, resolveShowPhase, formatShowTimeLabel } from "@/lib/timezone";
 import { cn } from "@/lib/utils";
 
 function pad(value: number) {
@@ -53,7 +53,7 @@ export function Countdown({
             <span className="absolute inline-flex size-full animate-ping rounded-full bg-red-500 opacity-75" />
             <span className="relative inline-flex size-2.5 rounded-full bg-red-500" />
           </span>
-          WE&apos;RE LIVE NOW
+          🔴 WE&apos;RE LIVE NOW
         </p>
       </div>
     );
@@ -81,7 +81,9 @@ export function Countdown({
       aria-live="polite"
       aria-label="Countdown to next live show"
     >
-      <p className="text-center text-sm font-medium text-white">Next Live in</p>
+      <p className="text-center text-sm font-medium text-white">
+        Next Live: Saturday at {formatShowTimeLabel(showTime, timezone)}
+      </p>
       <div className="mt-4 grid grid-cols-4">
         {units.map((unit, index) => (
           <div
@@ -129,15 +131,14 @@ export function ShowStatusBadge({
     return (
       <span className="inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1 text-xs font-medium text-red-300">
         <span className="size-1.5 rounded-full bg-red-500" />
-        Live now
+        🔴 WE&apos;RE LIVE NOW
       </span>
     );
   }
 
-  getShowEnd(start, durationMinutes);
   return (
     <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
-      Next Live: Saturday at {showTime}
+      Next Live: Saturday at {formatShowTimeLabel(showTime, timezone)}
     </span>
   );
 }

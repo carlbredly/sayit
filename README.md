@@ -39,6 +39,7 @@ Open [http://localhost:3000](http://localhost:3000).
 | `NEXT_PUBLIC_WHATSAPP_NUMBER` | Optional public contact number for the show |
 | `PAYPAL_DONATION_URL` | Donation link after submission (Zelle by default) |
 | `PAYPAL_CLIENT_ID` / `PAYPAL_CLIENT_SECRET` | Reserved for future PayPal API confirmation |
+| `CRON_SECRET` | Protects the weekly retention cron on Vercel |
 | `AUTH_SECRET` | Auth.js secret (generate with `openssl rand -base64 32`) |
 | `ADMIN_SECRET` | Optional extra secret used to hash rate-limit keys |
 | `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Local seed account only |
@@ -122,6 +123,9 @@ Production checklist:
 - [ ] Admin password is not the local default
 - [ ] Privacy and Terms were reviewed
 - [ ] Recipient WhatsApp numbers never appear on public pages
+- [ ] `CRON_SECRET` is set if you use the weekly retention job
+
+Retention: completed, read-live, and rejected dedications older than the Settings retention window are archived by the Saturday Vercel cron (`/api/cron/retention`) or the **Archive expired dedications** button in Settings.
 
 ## Privacy
 
@@ -133,11 +137,12 @@ Recipient WhatsApp numbers are admin-only. Public APIs and dedication cards neve
 - `/dedicate` 4-step dedication form
 - `/success` confirmation + optional donation
 - `/live` show page + countdown
-- `/dedication/[id]` public status
+- `/dedication/[public_id]` public confirmation (no WhatsApp or notes)
 - `/faq` `/privacy` `/terms`
 - `/admin` dashboard
 - `/admin/dedications` management
 - `/admin/live` drag-and-drop queue
 - `/admin/live/mode` host view
 - `/admin/donations`
+- `/admin/users` owner-only team access
 - `/admin/settings`
