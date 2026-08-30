@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { and, asc, desc, eq, ilike, or, sql } from "drizzle-orm";
+import { and, asc, desc, eq, ilike, inArray, or, sql } from "drizzle-orm";
 import { auth } from "@/auth";
 import { dedications, settings } from "@/drizzle/schema";
 import { getDb } from "@/lib/db";
@@ -263,6 +263,32 @@ export async function deleteDedication(id: string) {
   revalidatePath("/admin");
   revalidatePath("/admin/dedications");
   revalidatePath("/admin/live");
+}
+
+export async function deleteDedications(ids: string[]) {
+  await requireAdmin();
+  const unique = [
+    ...new Set(
+      ids.filter(
+        (id) =>
+          typeof id === "string" &&
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+            id
+          )
+      )
+    ),
+  ];
+  if (unique.length === 0) {
+    return { ok: false as const, error: "Aucune dédicace sélectionnée.", deleted: 0 };
+  }
+
+  const db = getDb();
+  await db.delete(dedications).where(inArray(dedications.id, unique));
+  revalidatePath("/admin");
+  revalidatePath("/admin/dedications");
+  revalidatePath("/admin/live");
+  revalidatePath("/admin/donations");
+  return { ok: true as const, deleted: unique.length };
 }
 
 export async function getLiveQueue() {

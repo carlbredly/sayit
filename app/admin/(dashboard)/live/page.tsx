@@ -11,14 +11,14 @@ export default async function LiveQueuePage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
         <div>
           <h1 className="font-display text-2xl font-semibold">File live</h1>
           <p className="text-sm text-muted-foreground">
             Glisse pour définir l&apos;ordre. Ouvre le mode hôte au moment du live.
           </p>
         </div>
-        <Link href="/admin/live/mode" className={cn(buttonVariants(), "h-11 px-5")}>
+        <Link href="/admin/live/mode" className={cn(buttonVariants(), "h-11 w-full px-5 sm:w-auto")}>
           Ouvrir le mode live
         </Link>
       </div>

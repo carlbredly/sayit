@@ -83,7 +83,7 @@ export function UsersManager({
       </form>
 
       <div className="overflow-x-auto rounded-2xl border border-border">
-        <table className="w-full min-w-[640px] text-left text-sm">
+        <table className="w-full text-left text-sm">
           <thead className="bg-muted/40 text-muted-foreground">
             <tr>
               <th className="px-4 py-3 font-medium">Utilisateur</th>
@@ -98,7 +98,7 @@ export function UsersManager({
                 <tr key={user.id} className="border-t border-border">
                   <td className="px-4 py-4">
                     <p className="font-medium">{user.name || "Hôte"}</p>
-                    <p className="text-muted-foreground">{user.email}</p>
+                    <p className="break-all text-muted-foreground">{user.email}</p>
                   </td>
                   <td className="px-4 py-4 text-muted-foreground">
                     {user.isOwner ? "Propriétaire" : "Équipe"}

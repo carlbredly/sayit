@@ -64,30 +64,28 @@ export default async function AdminHomePage() {
         <h1 className="font-display text-2xl font-semibold">Tableau de bord</h1>
         <p className="text-sm text-muted-foreground">L&apos;émission du samedi en un coup d&apos;œil.</p>
       </div>
-      <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-        <div className="flex min-w-[64rem] gap-3">
+      <div className="grid grid-cols-2 gap-2 sm:gap-3 xl:grid-cols-6">
           {cards.map((card) => (
             <div
               key={card.label}
-              className="flex min-h-[6.75rem] min-w-0 flex-1 items-start justify-between gap-3 rounded-2xl border border-border bg-card p-4"
+              className="flex min-h-[5.5rem] min-w-0 items-start justify-between gap-2 rounded-2xl border border-border bg-card p-3 sm:min-h-[6.75rem] sm:p-4"
             >
               <div className="min-w-0">
-                <p className="truncate text-xs text-muted-foreground sm:text-sm">{card.label}</p>
-                <p className="mt-2 font-display text-2xl font-semibold tabular-nums tracking-tight xl:text-3xl">
+                <p className="truncate text-[11px] text-muted-foreground sm:text-sm">{card.label}</p>
+                <p className="mt-1.5 font-display text-xl font-semibold tabular-nums tracking-tight sm:mt-2 sm:text-2xl xl:text-3xl">
                   {card.value}
                 </p>
               </div>
               <div
                 className={cn(
-                  "flex size-9 shrink-0 items-center justify-center rounded-full xl:size-11",
+                  "flex size-8 shrink-0 items-center justify-center rounded-full sm:size-9 xl:size-11",
                   card.iconClass
                 )}
               >
-                <card.icon className="size-4 xl:size-5" />
+                <card.icon className="size-3.5 sm:size-4 xl:size-5" />
               </div>
             </div>
           ))}
-        </div>
       </div>
       <section>
         <div className="mb-4 flex items-center justify-between">
@@ -101,14 +99,31 @@ export default async function AdminHomePage() {
             Pas encore de dédicaces ❤️
           </p>
         ) : (
-          <div className="overflow-x-auto rounded-2xl border border-border">
-            <table className="w-full min-w-[520px] text-left text-sm">
+          <div className="space-y-2 md:hidden">
+            {recent.slice(0, 8).map((row) => (
+              <Link
+                key={row.id}
+                href={`/admin/dedications/${row.id}`}
+                className="block rounded-2xl border border-border bg-card p-3"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <p className="truncate font-medium">{row.recipientName}</p>
+                  <StatusBadge status={row.status as DedicationStatus} />
+                </div>
+                <p className="mt-1 truncate text-sm text-muted-foreground">
+                  {row.isAnonymous ? "Anonyme" : row.senderName}
+                </p>
+              </Link>
+            ))}
+          </div>
+          <div className="hidden overflow-x-auto rounded-2xl border border-border md:block">
+            <table className="w-full text-left text-sm">
               <thead className="bg-muted/40 text-muted-foreground">
                 <tr>
                   <th className="px-3 py-3 font-medium">Statut</th>
                   <th className="px-3 py-3 font-medium">Expéditeur</th>
                   <th className="px-3 py-3 font-medium">Destinataire</th>
-                  <th className="hidden px-3 py-3 font-medium md:table-cell">Envoyée</th>
+                  <th className="px-3 py-3 font-medium">Envoyée</th>
                 </tr>
               </thead>
               <tbody>
@@ -125,7 +140,7 @@ export default async function AdminHomePage() {
                         {row.recipientName}
                       </Link>
                     </td>
-                    <td className="hidden px-3 py-3 text-muted-foreground md:table-cell">
+                    <td className="px-3 py-3 text-muted-foreground">
                       {formatDateTime(row.submittedAt)}
                     </td>
                   </tr>

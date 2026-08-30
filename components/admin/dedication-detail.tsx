@@ -44,7 +44,7 @@ export function DedicationDetail({
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-      <article className="rounded-3xl border border-border bg-card p-6">
+      <article className="rounded-3xl border border-border bg-card p-4 sm:p-6">
         <div className="flex items-center justify-between gap-3">
           <p className="font-mono text-sm text-muted-foreground">{dedication.publicId}</p>
           <StatusBadge status={dedication.status as DedicationStatus} />
@@ -58,7 +58,7 @@ export function DedicationDetail({
           </div>
           <div>
             <dt className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Destinataire</dt>
-            <dd className="mt-1 font-serif text-3xl italic text-primary">
+            <dd className="mt-1 font-serif text-2xl italic text-primary sm:text-3xl">
               {dedication.recipientName}
             </dd>
           </div>

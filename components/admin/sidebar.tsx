@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import {
   Clapperboard,
   Heart,
   LayoutDashboard,
   ListOrdered,
   LogOut,
+  Menu,
   Settings,
   Users,
   Wallet,
@@ -15,6 +17,7 @@ import {
 import { logoutAction } from "@/app/actions/auth";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 
 const NAV = [
   { href: "/admin", label: "Tableau de bord", icon: LayoutDashboard },
@@ -81,38 +84,65 @@ export function AdminMobileNav({
   isOwner?: boolean;
 }) {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
   const items = NAV;
+  const current =
+    items.find((item) =>
+      item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href)
+    )?.label || "Admin";
 
   return (
-    <div className="border-b border-border lg:hidden">
-      <div className="flex h-14 items-center justify-between px-4">
-        <p className="font-display font-semibold">{showName}</p>
-        <form action={logoutAction}>
-          <Button variant="ghost" size="sm" type="submit">
-            Déconnexion
-          </Button>
-        </form>
+    <div className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur-md lg:hidden">
+      <div className="flex h-14 items-center justify-between gap-3 px-3">
+        <div className="min-w-0">
+          <p className="truncate font-display font-semibold">{showName}</p>
+          <p className="truncate text-xs text-muted-foreground">{current}</p>
+        </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label="Ouvrir le menu admin"
+          onClick={() => setOpen(true)}
+        >
+          <Menu className="size-5" />
+        </Button>
       </div>
-      <nav className="flex gap-1 overflow-x-auto px-2 pb-2">
-        {items.map((item) => {
-          const active =
-            item.href === "/admin"
-              ? pathname === "/admin"
-              : pathname === item.href || pathname.startsWith(`${item.href}/`);
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "whitespace-nowrap rounded-full px-3 py-1.5 text-xs",
-                active ? "bg-primary/15 text-primary" : "text-muted-foreground"
-              )}
-            >
-              {item.label}
-            </Link>
-          );
-        })}
-      </nav>
+
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetContent side="right" className="bg-background p-5">
+          <SheetTitle>Menu admin</SheetTitle>
+          <nav className="mt-6 flex flex-col gap-1">
+            {items.map((item) => {
+              const active =
+                item.href === "/admin"
+                  ? pathname === "/admin"
+                  : pathname === item.href || pathname.startsWith(`${item.href}/`);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className={cn(
+                    "flex items-center gap-3 rounded-xl px-3 py-3 text-sm",
+                    active
+                      ? "bg-primary/15 text-primary"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  )}
+                >
+                  <item.icon className="size-4" />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+          <form action={logoutAction} className="mt-6 border-t border-border pt-4">
+            <Button variant="ghost" className="w-full justify-start text-muted-foreground" type="submit">
+              <LogOut className="size-4" />
+              Déconnexion
+            </Button>
+          </form>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }

@@ -39,7 +39,7 @@ function SortableRow({
     <li
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
-      className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4"
+      className="flex items-start gap-2 rounded-2xl border border-border bg-card p-3 sm:gap-3 sm:p-4"
     >
       <button
         type="button"

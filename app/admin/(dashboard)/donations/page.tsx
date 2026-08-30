@@ -25,7 +25,24 @@ export default async function DonationsPage() {
           Aucun don pour l&apos;instant.
         </p>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-border">
+        <div className="space-y-2 md:hidden">
+          {rows.map((row) => (
+            <Link
+              key={row.id}
+              href={`/admin/dedications/${row.id}`}
+              className="block rounded-2xl border border-border bg-card p-3"
+            >
+              <p className="font-medium">{row.recipientName}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{row.publicId}</p>
+              <p className="mt-2 text-sm">
+                {DONATION_STATUS_LABEL[row.donationStatus as DonationStatus] ||
+                  row.donationStatus}
+                {row.donationAmount ? ` · $${Number(row.donationAmount).toFixed(2)}` : ""}
+              </p>
+            </Link>
+          ))}
+        </div>
+        <div className="hidden overflow-x-auto rounded-2xl border border-border md:block">
           <table className="w-full text-left text-sm">
             <thead className="bg-muted/40 text-muted-foreground">
               <tr>
