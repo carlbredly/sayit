@@ -47,16 +47,32 @@ export const adminNotesSchema = z.object({
   notes: z.string().max(2000).optional().or(z.literal("")),
 });
 
+const optionalHttpUrl = z
+  .string()
+  .trim()
+  .refine(
+    (value) => value === "" || /^https?:\/\/\S+$/i.test(value),
+    "Entre une URL qui commence par http:// ou https://."
+  );
+
 export const settingsSchema = z.object({
-  showName: z.string().trim().min(1).max(80),
-  tiktokUrl: z.string().trim().url().or(z.literal("")),
-  paypalDonationUrl: z.string().trim().url().or(z.literal("")),
-  showTime: z.string().regex(/^\d{2}:\d{2}$/, "Utilise HH:MM."),
-  timezone: z.string().min(1).max(64),
+  showName: z.string().trim().min(1, "Le nom de l'émission est requis.").max(80),
+  tiktokUrl: optionalHttpUrl,
+  paypalDonationUrl: optionalHttpUrl,
+  showTime: z
+    .string()
+    .trim()
+    .transform((value) => {
+      const match = value.match(/^(\d{1,2}):(\d{2})/);
+      if (!match) return value;
+      return `${match[1].padStart(2, "0")}:${match[2]}`;
+    })
+    .refine((value) => /^\d{2}:\d{2}$/.test(value), "Utilise HH:MM."),
+  timezone: z.string().trim().min(1).max(64),
   showDurationMinutes: z.coerce.number().int().min(15).max(480),
-  whatsappMessageTemplate: z.string().max(1000),
+  whatsappMessageTemplate: z.string().max(4000),
   maxDedicationLength: z.coerce.number().int().min(80).max(4000),
-  donationMessage: z.string().trim().max(500).optional().or(z.literal("")),
+  donationMessage: z.string().trim().max(1000).optional().or(z.literal("")),
   retentionDays: z.coerce.number().int().min(7).max(3650),
   showStatusOverride: z.enum(["auto", "live", "off"]),
 });

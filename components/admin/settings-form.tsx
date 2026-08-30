@@ -23,9 +23,13 @@ export function SettingsForm({ initial }: { initial: AppSettings }) {
       onSubmit={(event) => {
         event.preventDefault();
         start(async () => {
-          const result = await updateSettingsAction(form);
-          if (result.ok) toast.success("Réglages enregistrés.");
-          else toast.error(result.error);
+          try {
+            const result = await updateSettingsAction(form);
+            if (result.ok) toast.success("Réglages enregistrés.");
+            else toast.error(result.error);
+          } catch {
+            toast.error("Ta session a peut-être expiré. Recharge et réessaie.");
+          }
         });
       }}
     >

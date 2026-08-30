@@ -375,19 +375,20 @@ export async function getDonations() {
 }
 
 export async function updateSettingsAction(input: unknown) {
-  await requireAdmin();
-  const parsed = settingsSchema.safeParse(input);
-  if (!parsed.success) {
-    return { ok: false as const, error: "Vérifie les réglages et réessaie." };
-  }
+  try {
+    await requireAdmin();
+    const parsed = settingsSchema.safeParse(input);
+    if (!parsed.success) {
+      return {
+        ok: false as const,
+        error: parsed.error.issues[0]?.message || "Vérifie les réglages et réessaie.",
+      };
+    }
 
-  const db = getDb();
-  const data = parsed.data;
-  const paypalDonationUrl = getPaypalDonationUrl(data.paypalDonationUrl);
-  await db
-    .insert(settings)
-    .values({
-      id: 1,
+    const db = getDb();
+    const data = parsed.data;
+    const paypalDonationUrl = getPaypalDonationUrl(data.paypalDonationUrl);
+    const payload = {
       showName: data.showName,
       tiktokUrl: data.tiktokUrl || null,
       paypalDonationUrl,
@@ -400,30 +401,33 @@ export async function updateSettingsAction(input: unknown) {
       retentionDays: data.retentionDays,
       showStatusOverride: data.showStatusOverride,
       updatedAt: new Date(),
-    })
-    .onConflictDoUpdate({
-      target: settings.id,
-      set: {
-        showName: data.showName,
-        tiktokUrl: data.tiktokUrl || null,
-        paypalDonationUrl,
-        showTime: data.showTime,
-        timezone: data.timezone,
-        showDurationMinutes: data.showDurationMinutes,
-        whatsappMessageTemplate: data.whatsappMessageTemplate,
-        maxDedicationLength: data.maxDedicationLength,
-        donationMessage: data.donationMessage || null,
-        retentionDays: data.retentionDays,
-        showStatusOverride: data.showStatusOverride,
-        updatedAt: new Date(),
-      },
-    });
+    };
 
-  revalidatePath("/");
-  revalidatePath("/live");
-  revalidatePath("/success");
-  revalidatePath("/admin/settings");
-  return { ok: true as const };
+    const [existing] = await db
+      .select({ id: settings.id })
+      .from(settings)
+      .where(eq(settings.id, 1))
+      .limit(1);
+
+    if (existing) {
+      await db.update(settings).set(payload).where(eq(settings.id, 1));
+    } else {
+      await db.insert(settings).values({ id: 1, ...payload });
+    }
+
+    revalidatePath("/");
+    revalidatePath("/live");
+    revalidatePath("/success");
+    revalidatePath("/admin/settings");
+    return { ok: true as const };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "";
+    if (message === "Unauthorized") {
+      return { ok: false as const, error: "Ta session a expiré. Recharge et reconnecte-toi." };
+    }
+    console.error("Settings update failed.", error);
+    return { ok: false as const, error: "Les réglages n'ont pas pu être enregistrés. Réessaie." };
+  }
 }
 
 export async function getAdminSettings() {
