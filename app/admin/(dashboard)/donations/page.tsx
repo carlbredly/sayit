@@ -25,6 +25,7 @@ export default async function DonationsPage() {
           Aucun don pour l&apos;instant.
         </p>
       ) : (
+        <>
         <div className="space-y-2 md:hidden">
           {rows.map((row) => (
             <Link
@@ -75,6 +76,7 @@ export default async function DonationsPage() {
             </tbody>
           </table>
         </div>
+        </>
       )}
     </div>
   );

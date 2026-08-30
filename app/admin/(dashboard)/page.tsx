@@ -99,6 +99,7 @@ export default async function AdminHomePage() {
             Pas encore de dédicaces ❤️
           </p>
         ) : (
+          <>
           <div className="space-y-2 md:hidden">
             {recent.slice(0, 8).map((row) => (
               <Link
@@ -148,6 +149,7 @@ export default async function AdminHomePage() {
               </tbody>
             </table>
           </div>
+          </>
         )}
       </section>
     </div>
