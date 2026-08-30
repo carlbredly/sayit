@@ -49,7 +49,7 @@ export function WhatsAppContactButton({
         className={cn(
           compact
             ? "inline-flex rounded-lg border border-border p-2 text-success hover:bg-muted"
-            : cn(buttonVariants(), "h-11 w-full", className)
+            : cn(buttonVariants(), "h-14 min-h-14 w-full shrink-0", className)
         )}
         onClick={() => {
           if (!alreadyContacted) setAsk(true);

@@ -50,47 +50,45 @@ export function HostMode({
       {current.adminNotes ? (
         <p className="mt-6 text-sm text-amber-300">Note : {current.adminNotes}</p>
       ) : null}
-      <div className="mt-12 flex flex-col gap-3 sm:flex-row">
+      <div className="mt-12 grid grid-cols-1 gap-3 sm:grid-cols-3">
         <Button
           variant="outline"
-          className="h-14 flex-1"
+          className="h-14 min-h-14 w-full"
           disabled={index === 0}
           onClick={() => setIndex((value) => Math.max(0, value - 1))}
         >
           Précédent
         </Button>
-        <div className="flex-1">
-          <WhatsAppContactButton
-            dedicationId={current.id}
-            phone={current.recipientWhatsapp}
-            message={message}
-            label="Contacter sur WhatsApp"
-            className="h-14"
-            alreadyContacted={
-              current.status === "CONTACTED" || Boolean(current.contactedAt)
-            }
-          />
-        </div>
+        <WhatsAppContactButton
+          dedicationId={current.id}
+          phone={current.recipientWhatsapp}
+          message={message}
+          label="WhatsApp"
+          className="h-14 min-h-14"
+          alreadyContacted={
+            current.status === "CONTACTED" || Boolean(current.contactedAt)
+          }
+        />
         <Button
           variant="outline"
-          className="h-14 flex-1"
+          className="h-14 min-h-14 w-full"
           disabled={index >= items.length - 1}
           onClick={() => setIndex((value) => Math.min(items.length - 1, value + 1))}
         >
           Suivant
         </Button>
       </div>
-      <div className="mt-3 flex flex-col gap-3 sm:flex-row">
+      <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
         <Button
-          className="h-14 flex-1"
+          className="h-14 min-h-14 w-full"
           disabled={pending}
           onClick={() => start(() => markReadLive(current.id))}
         >
-          Marquer lu en live
+          Lu en live
         </Button>
         <Button
           variant="outline"
-          className="h-14 flex-1"
+          className="h-14 min-h-14 w-full"
           disabled={pending}
           onClick={() => start(() => completeDedication(current.id))}
         >
